@@ -7,29 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>580</height>
+    <height>568</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QLabel" name="label">
-    <property name="geometry">
-     <rect>
-      <x>0</x>
-      <y>0</y>
-      <width>801</width>
-      <height>521</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string/>
-    </property>
-    <property name="pixmap">
-     <pixmap>../Screenshot 2025-03-07 002543.png</pixmap>
-    </property>
-   </widget>
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
@@ -610,6 +594,24 @@ background-color: rgb(255, 170, 255);</string>
      </attribute>
     </widget>
    </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>-14</x>
+      <y>-49</y>
+      <width>821</width>
+      <height>671</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="pixmap">
+     <pixmap>../Screenshot 2025-03-07 002543.png</pixmap>
+    </property>
+   </widget>
+   <zorder>label</zorder>
+   <zorder>tabWidget</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -620,6 +622,12 @@ background-color: rgb(255, 170, 255);</string>
      <height>17</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menuSTRATEDGGE">
+    <property name="title">
+     <string>STRATEDGGE</string>
+    </property>
+   </widget>
+   <addaction name="menuSTRATEDGGE"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>

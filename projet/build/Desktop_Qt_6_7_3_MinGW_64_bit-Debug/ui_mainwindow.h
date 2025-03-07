@@ -10,11 +10,13 @@
 #define UI_MAINWINDOW_H
 
 #include <QtCore/QVariant>
+#include <QtGui/QAction>
 #include <QtWidgets/QApplication>
 #include <QtWidgets/QComboBox>
 #include <QtWidgets/QHeaderView>
 #include <QtWidgets/QLabel>
 #include <QtWidgets/QMainWindow>
+#include <QtWidgets/QMenu>
 #include <QtWidgets/QMenuBar>
 #include <QtWidgets/QPushButton>
 #include <QtWidgets/QRadioButton>
@@ -30,7 +32,6 @@ class Ui_MainWindow
 {
 public:
     QWidget *centralwidget;
-    QLabel *label;
     QTabWidget *tabWidget;
     QWidget *tab;
     QLabel *label_2;
@@ -66,20 +67,18 @@ public:
     QWidget *tab_3;
     QWidget *tab_4;
     QWidget *tab_5;
+    QLabel *label;
     QMenuBar *menubar;
+    QMenu *menuSTRATEDGGE;
     QStatusBar *statusbar;
 
     void setupUi(QMainWindow *MainWindow)
     {
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName("MainWindow");
-        MainWindow->resize(800, 580);
+        MainWindow->resize(800, 568);
         centralwidget = new QWidget(MainWindow);
         centralwidget->setObjectName("centralwidget");
-        label = new QLabel(centralwidget);
-        label->setObjectName("label");
-        label->setGeometry(QRect(0, 0, 801, 521));
-        label->setPixmap(QPixmap(QString::fromUtf8("../Screenshot 2025-03-07 002543.png")));
         tabWidget = new QTabWidget(centralwidget);
         tabWidget->setObjectName("tabWidget");
         tabWidget->setGeometry(QRect(140, 100, 651, 421));
@@ -284,14 +283,24 @@ public:
         tab_5 = new QWidget();
         tab_5->setObjectName("tab_5");
         tabWidget->addTab(tab_5, QString());
+        label = new QLabel(centralwidget);
+        label->setObjectName("label");
+        label->setGeometry(QRect(-14, -49, 821, 671));
+        label->setPixmap(QPixmap(QString::fromUtf8("../Screenshot 2025-03-07 002543.png")));
         MainWindow->setCentralWidget(centralwidget);
+        label->raise();
+        tabWidget->raise();
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
         menubar->setGeometry(QRect(0, 0, 800, 17));
+        menuSTRATEDGGE = new QMenu(menubar);
+        menuSTRATEDGGE->setObjectName("menuSTRATEDGGE");
         MainWindow->setMenuBar(menubar);
         statusbar = new QStatusBar(MainWindow);
         statusbar->setObjectName("statusbar");
         MainWindow->setStatusBar(statusbar);
+
+        menubar->addAction(menuSTRATEDGGE->menuAction());
 
         retranslateUi(MainWindow);
 
@@ -304,7 +313,6 @@ public:
     void retranslateUi(QMainWindow *MainWindow)
     {
         MainWindow->setWindowTitle(QCoreApplication::translate("MainWindow", "MainWindow", nullptr));
-        label->setText(QString());
         label_2->setText(QCoreApplication::translate("MainWindow", "Nom", nullptr));
         label_3->setText(QCoreApplication::translate("MainWindow", "Pr\303\251nom", nullptr));
         label_4->setText(QCoreApplication::translate("MainWindow", "Email", nullptr));
@@ -354,6 +362,8 @@ public:
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QCoreApplication::translate("MainWindow", "Les Statistiques", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_4), QCoreApplication::translate("MainWindow", "TO DO LIST", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_5), QCoreApplication::translate("MainWindow", "ChatBot", nullptr));
+        label->setText(QString());
+        menuSTRATEDGGE->setTitle(QCoreApplication::translate("MainWindow", "STRATEDGGE", nullptr));
     } // retranslateUi
 
 };

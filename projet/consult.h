@@ -1,6 +1,6 @@
 #ifndef CONSULT_H
 #define CONSULT_H
-
+#include <QMessageBox>
 #include <QString>
 #include <QSqlQuery>
 #include <QList>
@@ -20,7 +20,7 @@ public:
     // Constructors
     Consultant();
     Consultant(QString nom, QString prenom, QString email, int tel, QString spec, QString exp, QString disp, QSqlQuery &query);
-
+    static bool deleteById(int id, QSqlQuery &query);
     // Getters
     int getIdCon() const;
     QString getNomCon() const;
@@ -49,6 +49,8 @@ public:
 
     // Method to get the maximum ID_CON from the database
     static int getMaxIdCon(QSqlQuery &query);
+
+    static bool updateConsultant(int id, const QString &column, const QString &newValue, QSqlQuery &query);
 };
 
 #endif // CONSULT_H

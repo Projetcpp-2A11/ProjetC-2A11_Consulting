@@ -143,3 +143,39 @@ int Consultant::getMaxIdCon(QSqlQuery &query) {
     }
     return maxId;
 }
+
+bool Consultant::deleteById(int id, QSqlQuery &query) {
+    query.prepare("DELETE FROM CONSULTANT WHERE ID_CON = :id");
+    query.bindValue(":id", id);
+
+    if (query.exec()) {
+        if (query.numRowsAffected() > 0) {
+            qDebug() << "Consultant deleted successfully!";
+            return true;
+        } else {
+            qDebug() << "No consultant found with ID:" << id;
+            return false;
+        }
+    } else {
+        qDebug() << "Error deleting consultant:";
+        return false;
+    }
+}
+bool Consultant::updateConsultant(int id, const QString &column, const QString &newValue, QSqlQuery &query) {
+    query.prepare(QString("UPDATE CONSULTANT SET %1 = :newValue WHERE ID_CON = :id").arg(column));
+    query.bindValue(":newValue", newValue);
+    query.bindValue(":id", id);
+
+    if (query.exec()) {
+        if (query.numRowsAffected() > 0) {
+            qDebug() << "Consultant updated successfully!";
+            return true;
+        } else {
+            qDebug() << "No consultant found with ID:" << id;
+            return false;
+        }
+    } else {
+        qDebug() << "Error updating consultant:" ;
+        return false;
+    }
+}
