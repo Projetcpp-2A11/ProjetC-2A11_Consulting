@@ -1,8 +1,9 @@
 #ifndef CONSULT_H
 #define CONSULT_H
-#include <QList>
+
 #include <QString>
 #include <QSqlQuery>
+#include <QList>
 
 class Consultant {
 private:
@@ -16,12 +17,11 @@ private:
     QString disponibilite;  // DISPONIBILITE
 
 public:
-
+    // Constructors
     Consultant();
-    Consultant(int id, QString nom, QString prenom, QString email, int tel, QString spec, QString exp, QString disp);
+    Consultant(QString nom, QString prenom, QString email, int tel, QString spec, QString exp, QString disp, QSqlQuery &query);
 
-
-
+    // Getters
     int getIdCon() const;
     QString getNomCon() const;
     QString getPrenomCon() const;
@@ -30,8 +30,8 @@ public:
     QString getSpecialisation() const;
     QString getExperience() const;
     QString getDisponibilite() const;
-    static QList<Consultant> fetchAllConsultants(QSqlQuery &query);
 
+    // Setters
     void setIdCon(int id);
     void setNomCon(QString nom);
     void setPrenomCon(QString prenom);
@@ -41,7 +41,14 @@ public:
     void setExperience(QString exp);
     void setDisponibilite(QString disp);
 
+    // Method to insert a Consultant into the database
     bool insertIntoDatabase(QSqlQuery &query);
+
+    // Method to fetch all consultants from the database
+    static QList<Consultant> fetchAllConsultants(QSqlQuery &query);
+
+    // Method to get the maximum ID_CON from the database
+    static int getMaxIdCon(QSqlQuery &query);
 };
 
 #endif // CONSULT_H

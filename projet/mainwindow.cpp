@@ -26,29 +26,28 @@ MainWindow::~MainWindow()
 {
     delete ui;
 }
-void MainWindow::on_ajouter_clicked()
-{
-    // Create a Consultant object and populate it with data from the UI
-
-    Consultant consultant;
-    consultant.setNomCon(ui->nom->toPlainText());
-    consultant.setPrenomCon(ui->prenom->toPlainText());
-    consultant.setEmailCon(ui->email->toPlainText());
-    consultant.setTelCon(ui->tele->toPlainText().toInt());
-    consultant.setSpecialisation(ui->spec->toPlainText());
-    consultant.setExperience(ui->list->currentText());
-    consultant.setDisponibilite(ui->oui->isChecked() ? "Oui" : "Non");
-
-
+void MainWindow::on_ajouter_clicked() {
     QSqlQuery query;
+
+    // Create a Consultant object and populate it with data from the UI
+    Consultant consultant(
+        ui->nom->toPlainText(),
+        ui->prenom->toPlainText(),
+        ui->email->toPlainText(),
+        ui->tele->toPlainText().toInt(),
+        ui->spec->toPlainText(),
+        ui->list->currentText(),
+        ui->oui->isChecked() ? "Oui" : "Non",
+        query // Pass the query object to the constructor
+        );
+
+    // Insert the consultant into the database
     if (consultant.insertIntoDatabase(query)) {
         qDebug() << "Data inserted successfully!";
     } else {
         qDebug() << "Failed to insert data.";
     }
 }
-
-
 void MainWindow::populateTable() {
 
     ui->tableau->setRowCount(0);

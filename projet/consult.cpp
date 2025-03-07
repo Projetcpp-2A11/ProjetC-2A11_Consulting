@@ -1,13 +1,26 @@
 #include "consult.h"
 #include <QSqlQuery>
 #include <QDebug>
+#include "mainwindow.h"
+#include "ui_mainwindow.h"
 
+    int nextIdCon = 1;
 // Default Constructor
 Consultant::Consultant() : idCon(0), nomCon(""), prenomCon(""), emailCon(""), telCon(0), specialisation(""), experience(""), disponibilite("") {}
 
+
+
 // Parameterized Constructor
-Consultant::Consultant(int id, QString nom, QString prenom, QString email, int tel, QString spec, QString exp, QString disp)
-    : idCon(id), nomCon(nom), prenomCon(prenom), emailCon(email), telCon(tel), specialisation(spec), experience(exp), disponibilite(disp) {}
+Consultant::Consultant(QString nom, QString prenom, QString email, int tel, QString spec, QString exp, QString disp, QSqlQuery &query)
+    : idCon(getMaxIdCon(query) + 1), // Generate the next ID_CON
+    nomCon(nom),
+    prenomCon(prenom),
+    emailCon(email),
+    telCon(tel),
+    specialisation(spec),
+    experience(exp),
+    disponibilite(disp) {}
+
 
 // Getters
 int Consultant::getIdCon() const {
@@ -79,6 +92,7 @@ void Consultant::setDisponibilite(QString disp) {
 bool Consultant::insertIntoDatabase(QSqlQuery &query) {
     query.prepare("INSERT INTO CONSULTANT (ID_CON, NOM_CON, PRENOM_CON, EMAIL_CON, TEL_CON, SPECIALISATION, EXPERIENCE, DISPONIBILITE) "
                   "VALUES (:id, :nom, :prenom, :email, :tel, :spec, :exp, :disp)");
+    query.bindValue(":id", idCon);
     query.bindValue(":nom", nomCon);
     query.bindValue(":prenom", prenomCon);
     query.bindValue(":email", emailCon);
@@ -94,7 +108,6 @@ bool Consultant::insertIntoDatabase(QSqlQuery &query) {
         qDebug() << "Error inserting consultant:"  ;
         return false;
     }
-
 }
 QList<Consultant> Consultant::fetchAllConsultants(QSqlQuery &query) {
     QList<Consultant> consultants;
@@ -118,4 +131,15 @@ QList<Consultant> Consultant::fetchAllConsultants(QSqlQuery &query) {
     }
 
     return consultants;
+}
+int Consultant::getMaxIdCon(QSqlQuery &query) {
+    int maxId = 0;
+    if (query.exec("SELECT MAX(ID_CON) FROM CONSULTANT")) {
+        if (query.next()) {
+            maxId = query.value(0).toInt();
+        }
+    } else {
+        qDebug() << "Error fetching max ID_CON:" ;
+    }
+    return maxId;
 }
