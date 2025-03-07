@@ -1,5 +1,6 @@
 #include "consult.h"
-#include <QString>
+#include <QSqlQuery>
+#include <QDebug>
 
 // Default Constructor
 Consultant::Consultant() : idCon(0), nomCon(""), prenomCon(""), emailCon(""), telCon(0), specialisation(""), experience(""), disponibilite("") {}
@@ -74,16 +75,47 @@ void Consultant::setDisponibilite(QString disp) {
     disponibilite = disp;
 }
 
-// Utility method to display consultant details
-QString Consultant::toString() const {
-    return QString("ID: %1, Name: %2 %3, Email: %4, Tel: %5, Specialisation: %6, Experience: %7, Disponibilite: %8")
-    .arg(idCon)
-        .arg(nomCon)
-        .arg(prenomCon)
-        .arg(emailCon)
-        .arg(telCon)
-        .arg(specialisation)
-        .arg(experience)
-        .arg(disponibilite);
-}
+// Method to insert a Consultant into the database
+bool Consultant::insertIntoDatabase(QSqlQuery &query) {
+    query.prepare("INSERT INTO CONSULTANT (ID_CON, NOM_CON, PRENOM_CON, EMAIL_CON, TEL_CON, SPECIALISATION, EXPERIENCE, DISPONIBILITE) "
+                  "VALUES (:id, :nom, :prenom, :email, :tel, :spec, :exp, :disp)");
+    query.bindValue(":nom", nomCon);
+    query.bindValue(":prenom", prenomCon);
+    query.bindValue(":email", emailCon);
+    query.bindValue(":tel", telCon);
+    query.bindValue(":spec", specialisation);
+    query.bindValue(":exp", experience);
+    query.bindValue(":disp", disponibilite);
 
+    if (query.exec()) {
+        qDebug() << "Consultant added to database!";
+        return true;
+    } else {
+        qDebug() << "Error inserting consultant:"  ;
+        return false;
+    }
+
+}
+QList<Consultant> Consultant::fetchAllConsultants(QSqlQuery &query) {
+    QList<Consultant> consultants;
+
+    if (query.exec("SELECT * FROM CONSULTANT")) {
+        while (query.next()) {
+            Consultant consultant;
+            consultant.setIdCon(query.value("ID_CON").toInt());
+            consultant.setNomCon(query.value("NOM_CON").toString());
+            consultant.setPrenomCon(query.value("PRENOM_CON").toString());
+            consultant.setEmailCon(query.value("EMAIL_CON").toString());
+            consultant.setTelCon(query.value("TEL_CON").toInt());
+            consultant.setSpecialisation(query.value("SPECIALISATION").toString());
+            consultant.setExperience(query.value("EXPERIENCE").toString());
+            consultant.setDisponibilite(query.value("DISPONIBILITE").toString());
+
+            consultants.append(consultant);
+        }
+    } else {
+        qDebug() << "Error fetching consultants:";
+    }
+
+    return consultants;
+}

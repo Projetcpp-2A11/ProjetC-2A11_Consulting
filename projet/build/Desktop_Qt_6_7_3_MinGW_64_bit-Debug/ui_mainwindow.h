@@ -49,9 +49,9 @@ public:
     QRadioButton *oui;
     QRadioButton *non;
     QTextEdit *spec;
-    QTextEdit *textEdit;
+    QTextEdit *histo;
     QTextEdit *eval;
-    QPushButton *pushButton;
+    QPushButton *ajouter;
     QWidget *tab_2;
     QTableWidget *tableau;
     QPushButton *mod;
@@ -177,16 +177,16 @@ public:
         spec = new QTextEdit(tab);
         spec->setObjectName("spec");
         spec->setGeometry(QRect(410, 310, 141, 21));
-        textEdit = new QTextEdit(tab);
-        textEdit->setObjectName("textEdit");
-        textEdit->setGeometry(QRect(410, 130, 201, 81));
+        histo = new QTextEdit(tab);
+        histo->setObjectName("histo");
+        histo->setGeometry(QRect(410, 130, 201, 81));
         eval = new QTextEdit(tab);
         eval->setObjectName("eval");
         eval->setGeometry(QRect(410, 250, 141, 21));
-        pushButton = new QPushButton(tab);
-        pushButton->setObjectName("pushButton");
-        pushButton->setGeometry(QRect(530, 350, 101, 31));
-        pushButton->setStyleSheet(QString::fromUtf8("font: 9pt \"Times New Roman\";\n"
+        ajouter = new QPushButton(tab);
+        ajouter->setObjectName("ajouter");
+        ajouter->setGeometry(QRect(530, 350, 101, 31));
+        ajouter->setStyleSheet(QString::fromUtf8("font: 9pt \"Times New Roman\";\n"
 "font-size: 16px ;\n"
 "color:rgb(170, 85, 255);\n"
 "background-color: rgb(255, 170, 255);"));
@@ -295,7 +295,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -322,7 +322,7 @@ public:
 
         oui->setText(QCoreApplication::translate("MainWindow", "Oui", nullptr));
         non->setText(QCoreApplication::translate("MainWindow", "Non", nullptr));
-        pushButton->setText(QCoreApplication::translate("MainWindow", "Ajouter", nullptr));
+        ajouter->setText(QCoreApplication::translate("MainWindow", "Ajouter", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab), QCoreApplication::translate("MainWindow", "Ajouter Consultant", nullptr));
         QTableWidgetItem *___qtablewidgetitem = tableau->horizontalHeaderItem(0);
         ___qtablewidgetitem->setText(QCoreApplication::translate("MainWindow", "ID", nullptr));

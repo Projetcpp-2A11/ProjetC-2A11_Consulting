@@ -46,7 +46,7 @@ background-color: rgb(193, 193, 193);
 </string>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>1</number>
     </property>
     <widget class="QWidget" name="tab">
      <attribute name="title">
@@ -328,7 +328,7 @@ color: rgb(0, 0, 0);</string>
        </rect>
       </property>
      </widget>
-     <widget class="QTextEdit" name="textEdit">
+     <widget class="QTextEdit" name="histo">
       <property name="geometry">
        <rect>
         <x>410</x>
@@ -348,7 +348,7 @@ color: rgb(0, 0, 0);</string>
        </rect>
       </property>
      </widget>
-     <widget class="QPushButton" name="pushButton">
+     <widget class="QPushButton" name="ajouter">
       <property name="geometry">
        <rect>
         <x>530</x>

@@ -14,10 +14,15 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    void onTabChanged(int index);
     MainWindow(QWidget *parent = nullptr);
+    void setupTable() ;
+    void populateTable();
+    void on_tab_2_clicked();
     ~MainWindow();
-
+    void on_ajouter_clicked();
 private:
     Ui::MainWindow *ui;
+ // Slot for the Ajouter button
 };
 #endif // MAINWINDOW_H
