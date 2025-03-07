@@ -4,6 +4,7 @@
 #include "consult.h"
 #include <QSqlQuery>
 #include <QDebug>
+
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -46,9 +47,9 @@ void MainWindow::on_ajouter_clicked() {
 
     // Insert the consultant into the database
     if (consultant.insertIntoDatabase(query)) {
-        qDebug() << "Data inserted successfully!";
+        QMessageBox::information(this, "Succès", "Consultant ajouté avec succès!");
     } else {
-        qDebug() << "Failed to insert data.";
+        QMessageBox::warning(this, "Erreur", "Échec de l'ajout du consultant.");
     }
 }
 void MainWindow::populateTable() {

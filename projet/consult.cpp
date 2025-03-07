@@ -1,26 +1,21 @@
 #include "consult.h"
 #include <QSqlQuery>
 #include <QDebug>
-#include "mainwindow.h"
-#include "ui_mainwindow.h"
+#include <QRegularExpression>
 
-    int nextIdCon = 1;
 // Default Constructor
 Consultant::Consultant() : idCon(0), nomCon(""), prenomCon(""), emailCon(""), telCon(0), specialisation(""), experience(""), disponibilite("") {}
-
-
 
 // Parameterized Constructor
 Consultant::Consultant(QString nom, QString prenom, QString email, int tel, QString spec, QString exp, QString disp, QSqlQuery &query)
     : idCon(getMaxIdCon(query) + 1), // Generate the next ID_CON
-    nomCon(nom),
-    prenomCon(prenom),
-    emailCon(email),
-    telCon(tel),
-    specialisation(spec),
-    experience(exp),
-    disponibilite(disp) {}
-
+      nomCon(nom),
+      prenomCon(prenom),
+      emailCon(email),
+      telCon(tel),
+      specialisation(spec),
+      experience(exp),
+      disponibilite(disp) {}
 
 // Getters
 int Consultant::getIdCon() const {
@@ -88,8 +83,80 @@ void Consultant::setDisponibilite(QString disp) {
     disponibilite = disp;
 }
 
-// Method to insert a Consultant into the database
+// Validation methods
+bool Consultant::validateNomPrenom(const QString &name, QString &error) {
+    if (name.length() < 3 || name.length() > 15) {
+        error = "Le nom et le prénom doivent contenir entre 3 et 15 caractères.";
+        return false;
+    }
+    return true;
+}
+
+bool Consultant::validateEmail(const QString &email, QString &error) {
+    QRegularExpression regex(R"((.+@.+\..+))");
+    if (!regex.match(email).hasMatch()) {
+        error = "L'email doit contenir un '@' et un '.'.";
+        return false;
+    }
+    return true;
+}
+
+bool Consultant::validateTel(int tel, QString &error) {
+    if (tel <= 0) {
+        error = "Le numéro de téléphone doit être un nombre positif.";
+        return false;
+    }
+    return true;
+}
+
+bool Consultant::validateExperience(const QString &experience, QString &error) {
+    if (experience == "Donner Votre expérience") {
+        error = "Veuillez entrer une expérience valide.";
+        return false;
+    }
+    if (experience.split(" ").size() > 20) {
+        error = "L'expérience ne doit pas dépasser 20 mots.";
+        return false;
+    }
+    return true;
+}
+
+bool Consultant::validateDisponibilite(const QString &disponibilite, QString &error) {
+    if (disponibilite.isEmpty()) {
+        error = "Veuillez sélectionner une disponibilité.";
+        return false;
+    }
+    return true;
+}
+
+
 bool Consultant::insertIntoDatabase(QSqlQuery &query) {
+    QString error;
+    if (!validateNomPrenom(nomCon, error)) { // Fixed: Added missing ')'
+        QMessageBox::warning(nullptr, "Erreur", error);
+        return false;
+    }
+    if (!validateNomPrenom(prenomCon, error)) {
+        QMessageBox::warning(nullptr, "Erreur", error);
+        return false;
+    }
+    if (!validateEmail(emailCon, error)) {
+        QMessageBox::warning(nullptr, "Erreur", error);
+        return false;
+    }
+    if (!validateTel(telCon, error)) {
+        QMessageBox::warning(nullptr, "Erreur", error);
+        return false;
+    }
+    if (!validateExperience(experience, error)) {
+        QMessageBox::warning(nullptr, "Erreur", error);
+        return false;
+    }
+    if (!validateDisponibilite(disponibilite, error)) {
+        QMessageBox::warning(nullptr, "Erreur", error);
+        return false;
+    }
+
     query.prepare("INSERT INTO CONSULTANT (ID_CON, NOM_CON, PRENOM_CON, EMAIL_CON, TEL_CON, SPECIALISATION, EXPERIENCE, DISPONIBILITE) "
                   "VALUES (:id, :nom, :prenom, :email, :tel, :spec, :exp, :disp)");
     query.bindValue(":id", idCon);
@@ -105,10 +172,11 @@ bool Consultant::insertIntoDatabase(QSqlQuery &query) {
         qDebug() << "Consultant added to database!";
         return true;
     } else {
-        qDebug() << "Error inserting consultant:"  ;
+        qDebug() << "Error inserting consultant:";
         return false;
     }
 }
+
 QList<Consultant> Consultant::fetchAllConsultants(QSqlQuery &query) {
     QList<Consultant> consultants;
 
@@ -127,11 +195,13 @@ QList<Consultant> Consultant::fetchAllConsultants(QSqlQuery &query) {
             consultants.append(consultant);
         }
     } else {
-        qDebug() << "Error fetching consultants:";
+        qDebug() << "Error fetching consultants:" ;
     }
 
     return consultants;
 }
+
+// Method to get the maximum ID_CON from the database
 int Consultant::getMaxIdCon(QSqlQuery &query) {
     int maxId = 0;
     if (query.exec("SELECT MAX(ID_CON) FROM CONSULTANT")) {
@@ -139,11 +209,12 @@ int Consultant::getMaxIdCon(QSqlQuery &query) {
             maxId = query.value(0).toInt();
         }
     } else {
-        qDebug() << "Error fetching max ID_CON:" ;
+        qDebug() << "Error fetching max ID_CON:";
     }
     return maxId;
 }
 
+// Method to delete a Consultant by ID
 bool Consultant::deleteById(int id, QSqlQuery &query) {
     query.prepare("DELETE FROM CONSULTANT WHERE ID_CON = :id");
     query.bindValue(":id", id);
@@ -157,10 +228,12 @@ bool Consultant::deleteById(int id, QSqlQuery &query) {
             return false;
         }
     } else {
-        qDebug() << "Error deleting consultant:";
+        qDebug() << "Error deleting consultant:" ;
         return false;
     }
 }
+
+// Method to update a Consultant in the database
 bool Consultant::updateConsultant(int id, const QString &column, const QString &newValue, QSqlQuery &query) {
     query.prepare(QString("UPDATE CONSULTANT SET %1 = :newValue WHERE ID_CON = :id").arg(column));
     query.bindValue(":newValue", newValue);

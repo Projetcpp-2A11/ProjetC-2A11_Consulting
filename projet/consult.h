@@ -43,7 +43,11 @@ public:
 
     // Method to insert a Consultant into the database
     bool insertIntoDatabase(QSqlQuery &query);
-
+    static bool validateNomPrenom(const QString &name, QString &error);
+    static bool validateEmail(const QString &email, QString &error);
+    static bool validateTel(int tel, QString &error);
+    static bool validateExperience(const QString &experience, QString &error);
+    static bool validateDisponibilite(const QString &disponibilite, QString &error);
     // Method to fetch all consultants from the database
     static QList<Consultant> fetchAllConsultants(QSqlQuery &query);
 
