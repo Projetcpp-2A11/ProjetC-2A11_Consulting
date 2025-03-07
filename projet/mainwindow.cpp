@@ -1,5 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "connection.h"
+#include "consult.h"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
