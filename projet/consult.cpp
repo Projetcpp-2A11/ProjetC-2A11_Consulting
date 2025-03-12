@@ -214,7 +214,7 @@ int Consultant::getMaxIdCon(QSqlQuery &query) {
     return maxId;
 }
 
-// Method to delete a Consultant by ID
+
 bool Consultant::deleteById(int id, QSqlQuery &query) {
     query.prepare("DELETE FROM CONSULTANT WHERE ID_CON = :id");
     query.bindValue(":id", id);
@@ -233,7 +233,7 @@ bool Consultant::deleteById(int id, QSqlQuery &query) {
     }
 }
 
-// Method to update a Consultant in the database
+
 bool Consultant::updateConsultant(int id, const QString &column, const QString &newValue, QSqlQuery &query) {
     query.prepare(QString("UPDATE CONSULTANT SET %1 = :newValue WHERE ID_CON = :id").arg(column));
     query.bindValue(":newValue", newValue);

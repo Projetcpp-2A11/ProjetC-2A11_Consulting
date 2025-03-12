@@ -20,7 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->mod, &QPushButton::clicked, this, &MainWindow::on_modifications_clicked);
 }
 void MainWindow::onTabChanged(int index) {
-    if (index == 1) { // Assuming tab_2 is the second tab (index 1)
+    if (index == 1) {
         populateTable();
     }
 }
@@ -33,7 +33,7 @@ MainWindow::~MainWindow()
 void MainWindow::on_ajouter_clicked() {
     QSqlQuery query;
 
-    // Create a Consultant object and populate it with data from the UI
+
     Consultant consultant(
         ui->nom->toPlainText(),
         ui->prenom->toPlainText(),
@@ -42,10 +42,10 @@ void MainWindow::on_ajouter_clicked() {
         ui->spec->toPlainText(),
         ui->list->currentText(),
         ui->oui->isChecked() ? "Oui" : "Non",
-        query // Pass the query object to the constructor
+        query
         );
 
-    // Insert the consultant into the database
+
     if (consultant.insertIntoDatabase(query)) {
         QMessageBox::information(this, "Succès", "Consultant ajouté avec succès!");
     } else {
@@ -53,20 +53,19 @@ void MainWindow::on_ajouter_clicked() {
     }
 }
 void MainWindow::populateTable() {
-    // Clear the table and original values
+
     ui->tableau->setRowCount(0);
     originalValues.clear();
 
-    // Fetch all consultants from the database
+
     QSqlQuery query;
     QList<Consultant> consultants = Consultant::fetchAllConsultants(query);
 
-    // Populate the table and store original values
     for (const Consultant &consultant : consultants) {
         int row = ui->tableau->rowCount();
         ui->tableau->insertRow(row);
 
-        // Add data to each column
+
         ui->tableau->setItem(row, 0, new QTableWidgetItem(QString::number(consultant.getIdCon())));
         ui->tableau->setItem(row, 1, new QTableWidgetItem(consultant.getNomCon()));
         ui->tableau->setItem(row, 2, new QTableWidgetItem(consultant.getPrenomCon()));
@@ -76,7 +75,7 @@ void MainWindow::populateTable() {
         ui->tableau->setItem(row, 6, new QTableWidgetItem(consultant.getExperience()));
         ui->tableau->setItem(row, 7, new QTableWidgetItem(consultant.getDisponibilite()));
 
-        // Store original values
+
         for (int col = 0; col < ui->tableau->columnCount(); ++col) {
             originalValues.insert({row, col}, ui->tableau->item(row, col)->text());
         }
@@ -116,29 +115,28 @@ void MainWindow::on_supp_clicked() {
     }
 }
 void MainWindow::on_modifications_clicked() {
-    // Get the selected row
+
     int selectedRow = ui->tableau->currentRow();
 
-    // Check if a row is selected
+
     if (selectedRow < 0) {
         QMessageBox::warning(this, "Erreur", "Veuillez sélectionner une ligne à modifier.");
         return;
     }
 
-    // Get the ID_CON from the selected row
+
     int id = ui->tableau->item(selectedRow, 0)->text().toInt();
 
     // Track if any updates were made
     bool updateSuccess = false;
 
-    // Loop through each column and check for changes
+
     for (int col = 1; col < ui->tableau->columnCount(); ++col) {
         QTableWidgetItem *item = ui->tableau->item(selectedRow, col);
         if (item) {
             QString currentValue = item->text();
             QString originalValue = originalValues.value({selectedRow, col});
 
-            // Check if the value has changed
             if (currentValue != originalValue) {
                 QString columnName;
                 switch (col) {
@@ -152,11 +150,11 @@ void MainWindow::on_modifications_clicked() {
                 default: continue; // Skip invalid columns
                 }
 
-                // Update the database
+
                 QSqlQuery query;
                 if (Consultant::updateConsultant(id, columnName, currentValue, query)) {
                     updateSuccess = true;
-                    // Update the original value in the map
+
                     originalValues[{selectedRow, col}] = currentValue;
                 } else {
                     QMessageBox::warning(this, "Erreur", QString("Erreur lors de la mise à jour de la colonne %1.").arg(columnName));

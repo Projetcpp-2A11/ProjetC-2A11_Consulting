@@ -27,6 +27,6 @@ public:
     void on_modifications_clicked();
 private:
     Ui::MainWindow *ui;
- // Slot for the Ajouter button
+
 };
 #endif // MAINWINDOW_H
