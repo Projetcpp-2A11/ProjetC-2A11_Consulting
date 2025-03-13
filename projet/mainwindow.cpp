@@ -126,8 +126,6 @@ void MainWindow::on_modifications_clicked() {
 
 
     int id = ui->tableau->item(selectedRow, 0)->text().toInt();
-
-    // Track if any updates were made
     bool updateSuccess = false;
 
 
@@ -147,7 +145,7 @@ void MainWindow::on_modifications_clicked() {
                 case 5: columnName = "SPECIALISATION"; break;
                 case 6: columnName = "EXPERIENCE"; break;
                 case 7: columnName = "DISPONIBILITE"; break;
-                default: continue; // Skip invalid columns
+                default: continue;
                 }
 
 
@@ -167,6 +165,6 @@ void MainWindow::on_modifications_clicked() {
     if (updateSuccess) {
         QMessageBox::information(this, "<Succès", "Modification réussite!");
     } else {
-        QMessageBox::warning(this, "Erreur", "Aucune modification détectée.");
+        QMessageBox::warning(this, "Erreur", "Aucune Modification détectée.");
     }
 }

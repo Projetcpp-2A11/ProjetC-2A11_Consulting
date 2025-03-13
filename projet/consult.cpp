@@ -3,12 +3,12 @@
 #include <QDebug>
 #include <QRegularExpression>
 
-// Default Constructor
+//Constructor par defaut
 Consultant::Consultant() : idCon(0), nomCon(""), prenomCon(""), emailCon(""), telCon(0), specialisation(""), experience(""), disponibilite("") {}
 
-// Parameterized Constructor
+// Constructor avec paramtére
 Consultant::Consultant(QString nom, QString prenom, QString email, int tel, QString spec, QString exp, QString disp, QSqlQuery &query)
-    : idCon(getMaxIdCon(query) + 1), // Generate the next ID_CON
+    : idCon(getMaxIdCon(query) + 1),
       nomCon(nom),
       prenomCon(prenom),
       emailCon(email),
@@ -17,7 +17,7 @@ Consultant::Consultant(QString nom, QString prenom, QString email, int tel, QStr
       experience(exp),
       disponibilite(disp) {}
 
-// Getters
+//Les Getters
 int Consultant::getIdCon() const {
     return idCon;
 }
@@ -50,7 +50,7 @@ QString Consultant::getDisponibilite() const {
     return disponibilite;
 }
 
-// Setters
+// Les Setters
 void Consultant::setIdCon(int id) {
     idCon = id;
 }
@@ -83,7 +83,7 @@ void Consultant::setDisponibilite(QString disp) {
     disponibilite = disp;
 }
 
-// Validation methods
+// Validations
 bool Consultant::validateNomPrenom(const QString &name, QString &error) {
     if (name.length() < 3 || name.length() > 15) {
         error = "Le nom et le prénom doivent contenir entre 3 et 15 caractères.";
@@ -132,7 +132,7 @@ bool Consultant::validateDisponibilite(const QString &disponibilite, QString &er
 
 bool Consultant::insertIntoDatabase(QSqlQuery &query) {
     QString error;
-    if (!validateNomPrenom(nomCon, error)) { // Fixed: Added missing ')'
+    if (!validateNomPrenom(nomCon, error)) {
         QMessageBox::warning(nullptr, "Erreur", error);
         return false;
     }
@@ -169,10 +169,10 @@ bool Consultant::insertIntoDatabase(QSqlQuery &query) {
     query.bindValue(":disp", disponibilite);
 
     if (query.exec()) {
-        qDebug() << "Consultant added to database!";
+        qDebug() << "Consultant Ajouter au Base de données!";
         return true;
     } else {
-        qDebug() << "Error inserting consultant:";
+        qDebug() << "Erreur d'insertion consultant!";
         return false;
     }
 }
@@ -195,13 +195,12 @@ QList<Consultant> Consultant::fetchAllConsultants(QSqlQuery &query) {
             consultants.append(consultant);
         }
     } else {
-        qDebug() << "Error fetching consultants:" ;
+        qDebug() << "Erreur fetching des consultants!" ;
     }
 
     return consultants;
 }
 
-// Method to get the maximum ID_CON from the database
 int Consultant::getMaxIdCon(QSqlQuery &query) {
     int maxId = 0;
     if (query.exec("SELECT MAX(ID_CON) FROM CONSULTANT")) {
@@ -209,7 +208,7 @@ int Consultant::getMaxIdCon(QSqlQuery &query) {
             maxId = query.value(0).toInt();
         }
     } else {
-        qDebug() << "Error fetching max ID_CON:";
+        qDebug() << "Error fetching le maximum ID_CON:";
     }
     return maxId;
 }
@@ -221,14 +220,14 @@ bool Consultant::deleteById(int id, QSqlQuery &query) {
 
     if (query.exec()) {
         if (query.numRowsAffected() > 0) {
-            qDebug() << "Consultant deleted successfully!";
+            qDebug() << "Consultant Supprimer avec succéss!";
             return true;
         } else {
-            qDebug() << "No consultant found with ID:" << id;
+            qDebug() << "Aucun consultants trouvé avec cette ID:" << id;
             return false;
         }
     } else {
-        qDebug() << "Error deleting consultant:" ;
+        qDebug() << "Erreur de Supprision de consultant!" ;
         return false;
     }
 }
@@ -241,14 +240,14 @@ bool Consultant::updateConsultant(int id, const QString &column, const QString &
 
     if (query.exec()) {
         if (query.numRowsAffected() > 0) {
-            qDebug() << "Consultant updated successfully!";
+            qDebug() << "Consultant Modifié avec succéss!";
             return true;
         } else {
-            qDebug() << "No consultant found with ID:" << id;
+            qDebug() << "Aucun consultants trouvée avec cette  ID:" << id;
             return false;
         }
     } else {
-        qDebug() << "Error updating consultant:" ;
+        qDebug() << "Error de Modification de consultant!" ;
         return false;
     }
 }

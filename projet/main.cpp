@@ -20,7 +20,7 @@ int main(int argc, char *argv[])
 
         w.show();
         QMessageBox::information(nullptr, QObject::tr("Database Connection"),
-                                 QObject::tr("Connection successful.\n"
+                                 QObject::tr("Connection Avec Succées.\n"
                                              "Click OK to continue."), QMessageBox::Ok);
     } else {
 
