@@ -1,0 +1,958 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1239</width>
+    <height>742</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>70</x>
+      <y>30</y>
+      <width>1131</width>
+      <height>601</height>
+     </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Expanding">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>1131</width>
+      <height>601</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>1131</width>
+      <height>16777215</height>
+     </size>
+    </property>
+    <property name="tabletTracking">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">QTabWidget::pane {
+    border: 2px solid #D3D3D3;
+    background: #F8F9FA;
+    border-radius: 20px;
+}
+
+QTabBar {
+    alignment: left;
+    min-width: 100px; /* Make sidebar thinner */
+}
+
+QTabBar::tab {
+    background: #E0E7F0;
+    color: #000;
+    border: 1px solid #D3D3D3;
+    border-radius: 10px;
+    padding: 5px 10px;  /* Adjust padding for smaller size */
+    font-size: 14px;
+    font-weight: bold;
+    width: 40px;  /* Reduce width */
+    height: 73px;  /* Reduce height */
+    text-align: center;
+}
+
+QTabBar::tab:selected {
+    background-color: #0078D7; /* Color for selected tab */
+    color: white;
+    border-left: 3px solid #FFD700;
+}
+
+QTabBar::tab:hover {
+    background: #A9A9A9;
+    color: white;
+}
+</string>
+    </property>
+    <property name="tabPosition">
+     <enum>QTabWidget::TabPosition::West</enum>
+    </property>
+    <property name="tabShape">
+     <enum>QTabWidget::TabShape::Rounded</enum>
+    </property>
+    <property name="currentIndex">
+     <number>1</number>
+    </property>
+    <property name="iconSize">
+     <size>
+      <width>173</width>
+      <height>38</height>
+     </size>
+    </property>
+    <property name="tabsClosable">
+     <bool>false</bool>
+    </property>
+    <property name="movable">
+     <bool>false</bool>
+    </property>
+    <property name="tabBarAutoHide">
+     <bool>false</bool>
+    </property>
+    <widget class="QWidget" name="acceuil">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>80</width>
+       <height>35</height>
+      </size>
+     </property>
+     <attribute name="title">
+      <string>Acceuil</string>
+     </attribute>
+     <widget class="QPushButton" name="login">
+      <property name="geometry">
+       <rect>
+        <x>740</x>
+        <y>420</y>
+        <width>151</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>se connecter</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit">
+      <property name="geometry">
+       <rect>
+        <x>720</x>
+        <y>290</y>
+        <width>201</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="placeholderText">
+       <string>Entrer votre email</string>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="lineEdit_2">
+      <property name="geometry">
+       <rect>
+        <x>720</x>
+        <y>360</y>
+        <width>201</width>
+        <height>28</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="echoMode">
+       <enum>QLineEdit::EchoMode::Password</enum>
+      </property>
+      <property name="placeholderText">
+       <string>Entrer votre mot de passe</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>720</x>
+        <y>250</y>
+        <width>63</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: #000000; </string>
+      </property>
+      <property name="text">
+       <string>Email</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_2">
+      <property name="geometry">
+       <rect>
+        <x>720</x>
+        <y>330</y>
+        <width>101</width>
+        <height>20</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: #000000; </string>
+      </property>
+      <property name="text">
+       <string>Mot de passe</string>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_3">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>30</y>
+        <width>681</width>
+        <height>531</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
+      <property name="pixmap">
+       <pixmap resource="ressource.qrc">:/img/476340197_494486546746576_7566987837383606640_n.png</pixmap>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_2">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>80</width>
+       <height>35</height>
+      </size>
+     </property>
+     <attribute name="title">
+      <string>Employé</string>
+     </attribute>
+     <widget class="QTabWidget" name="tabWidget_2">
+      <property name="geometry">
+       <rect>
+        <x>60</x>
+        <y>10</y>
+        <width>921</width>
+        <height>561</height>
+       </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QTabBar {
+    min-height: 40px; /* Adjust height to make tabs longer */
+    background-color: #FFFFFF; /* Background color */
+}
+QTabBar::tab {
+    min-width: 100px; /* Adjust width to make tabs thinner */
+    padding: 10px; /* Add padding for better appearance */
+    margin: 0; /* Remove margin for compactness */
+}
+QTabBar::tab:selected {
+    background-color: #0078D7; /* Color for selected tab */
+}
+QTabBar::tab {
+    background: #E0E7F0;
+    color: #000;
+    border: 1px solid #D3D3D3;
+    border-radius: 10px;
+    padding: 5px 10px;  /* Adjust padding for smaller size */
+    font-size: 18px;
+    font-weight: bold;
+    width: 285px;  /* Reduce width */
+    height: 40px;  /* Reduce height */
+    text-align: center;
+}</string>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>Afficher</string>
+       </attribute>
+       <widget class="QTableView" name="tab_emp">
+        <property name="geometry">
+         <rect>
+          <x>50</x>
+          <y>40</y>
+          <width>831</width>
+          <height>421</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="Supprimer_emp">
+        <property name="geometry">
+         <rect>
+          <x>742</x>
+          <y>470</y>
+          <width>131</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Supprimer</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="modifier_2">
+        <property name="geometry">
+         <rect>
+          <x>570</x>
+          <y>470</y>
+          <width>151</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>modifier</string>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Ajouter</string>
+       </attribute>
+       <widget class="QLabel" name="label_4">
+        <property name="geometry">
+         <rect>
+          <x>50</x>
+          <y>80</y>
+          <width>63</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: #000000; </string>
+        </property>
+        <property name="text">
+         <string>Nom</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_5">
+        <property name="geometry">
+         <rect>
+          <x>50</x>
+          <y>250</y>
+          <width>131</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: #000000; </string>
+        </property>
+        <property name="text">
+         <string>Date de naissance</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_6">
+        <property name="geometry">
+         <rect>
+          <x>50</x>
+          <y>350</y>
+          <width>111</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: #000000; </string>
+        </property>
+        <property name="text">
+         <string>Telephone</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_7">
+        <property name="geometry">
+         <rect>
+          <x>50</x>
+          <y>170</y>
+          <width>63</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: #000000; </string>
+        </property>
+        <property name="text">
+         <string>Prénom</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_8">
+        <property name="geometry">
+         <rect>
+          <x>470</x>
+          <y>80</y>
+          <width>63</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: #000000; </string>
+        </property>
+        <property name="text">
+         <string>Email</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_9">
+        <property name="geometry">
+         <rect>
+          <x>470</x>
+          <y>170</y>
+          <width>63</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: #000000; </string>
+        </property>
+        <property name="text">
+         <string>Mdp</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_10">
+        <property name="geometry">
+         <rect>
+          <x>470</x>
+          <y>250</y>
+          <width>63</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: #000000; </string>
+        </property>
+        <property name="text">
+         <string>Poste</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_3">
+        <property name="geometry">
+         <rect>
+          <x>220</x>
+          <y>80</y>
+          <width>113</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_4">
+        <property name="geometry">
+         <rect>
+          <x>220</x>
+          <y>340</y>
+          <width>113</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_6">
+        <property name="geometry">
+         <rect>
+          <x>220</x>
+          <y>170</y>
+          <width>113</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_7">
+        <property name="geometry">
+         <rect>
+          <x>600</x>
+          <y>80</y>
+          <width>113</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_8">
+        <property name="geometry">
+         <rect>
+          <x>600</x>
+          <y>170</y>
+          <width>113</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="ajouter">
+        <property name="geometry">
+         <rect>
+          <x>510</x>
+          <y>350</y>
+          <width>151</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Ajouter</string>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBox">
+        <property name="geometry">
+         <rect>
+          <x>600</x>
+          <y>250</y>
+          <width>121</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <item>
+         <property name="text">
+          <string>Directeur</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Admin</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Rh</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Consultant </string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QDateEdit" name="dateEdit">
+        <property name="geometry">
+         <rect>
+          <x>220</x>
+          <y>250</y>
+          <width>110</width>
+          <height>29</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+      <widget class="QWidget" name="tab_4">
+       <attribute name="title">
+        <string>Modifier</string>
+       </attribute>
+       <widget class="QLabel" name="label_11">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>60</y>
+          <width>63</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: #000000; </string>
+        </property>
+        <property name="text">
+         <string>Nom</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_12">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>150</y>
+          <width>63</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: #000000; </string>
+        </property>
+        <property name="text">
+         <string>Prénom</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_13">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>240</y>
+          <width>131</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>9</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: #000000; </string>
+        </property>
+        <property name="text">
+         <string>Date de naissance</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_14">
+        <property name="geometry">
+         <rect>
+          <x>40</x>
+          <y>350</y>
+          <width>111</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: #000000; </string>
+        </property>
+        <property name="text">
+         <string>Telephone</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_15">
+        <property name="geometry">
+         <rect>
+          <x>490</x>
+          <y>60</y>
+          <width>63</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: #000000; </string>
+        </property>
+        <property name="text">
+         <string>Email</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_16">
+        <property name="geometry">
+         <rect>
+          <x>490</x>
+          <y>150</y>
+          <width>63</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: #000000; </string>
+        </property>
+        <property name="text">
+         <string>Mdp</string>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_17">
+        <property name="geometry">
+         <rect>
+          <x>490</x>
+          <y>240</y>
+          <width>63</width>
+          <height>20</height>
+         </rect>
+        </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: #000000; </string>
+        </property>
+        <property name="text">
+         <string>Poste</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="modifier">
+        <property name="geometry">
+         <rect>
+          <x>570</x>
+          <y>350</y>
+          <width>151</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>modifier</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_10">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>60</y>
+          <width>113</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_11">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>150</y>
+          <width>113</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_13">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>340</y>
+          <width>113</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_14">
+        <property name="geometry">
+         <rect>
+          <x>620</x>
+          <y>60</y>
+          <width>113</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_15">
+        <property name="geometry">
+         <rect>
+          <x>620</x>
+          <y>150</y>
+          <width>113</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QComboBox" name="comboBox_2">
+        <property name="geometry">
+         <rect>
+          <x>620</x>
+          <y>240</y>
+          <width>121</width>
+          <height>28</height>
+         </rect>
+        </property>
+        <item>
+         <property name="text">
+          <string>Directeur</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Admin</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Rh</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Consultant </string>
+         </property>
+        </item>
+       </widget>
+       <widget class="QDateEdit" name="dateEdit_2">
+        <property name="geometry">
+         <rect>
+          <x>200</x>
+          <y>240</y>
+          <width>110</width>
+          <height>29</height>
+         </rect>
+        </property>
+       </widget>
+      </widget>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="tab_6">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>80</width>
+       <height>35</height>
+      </size>
+     </property>
+     <attribute name="title">
+      <string>Client</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="tab_5">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>80</width>
+       <height>35</height>
+      </size>
+     </property>
+     <attribute name="title">
+      <string>Consultant</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="tab_7">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>80</width>
+       <height>35</height>
+      </size>
+     </property>
+     <attribute name="title">
+      <string>Projet</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="tab_11">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>80</width>
+       <height>35</height>
+      </size>
+     </property>
+     <attribute name="title">
+      <string>RDV</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="tab_12">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>80</width>
+       <height>35</height>
+      </size>
+     </property>
+     <attribute name="title">
+      <string>Réclamation</string>
+     </attribute>
+    </widget>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1239</width>
+     <height>25</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources>
+  <include location="ressource.qrc"/>
+ </resources>
+ <connections/>
+</ui>
