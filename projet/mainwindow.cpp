@@ -4,6 +4,14 @@
 #include "consult.h"
 #include <QSqlQuery>
 #include <QDebug>
+#include <QTextDocument>
+#include <QDir>
+#include <QFileDialog>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QPageSize>
+#include <QMarginsF>
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -15,7 +23,7 @@ MainWindow::MainWindow(QWidget *parent)
     populateTable();
     connect(ui->tabWidget, &QTabWidget::currentChanged, this, &MainWindow::onTabChanged);
     connect(ui->supp, &QPushButton::clicked, this, &MainWindow::on_supp_clicked);
-
+    connect(ui->pdf, &QPushButton::clicked, this, &MainWindow::on_pdf_clicked);
     ui->tableau->setEditTriggers(QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed);
     connect(ui->mod, &QPushButton::clicked, this, &MainWindow::on_modifications_clicked);
 }
@@ -167,4 +175,55 @@ void MainWindow::on_modifications_clicked() {
     } else {
         QMessageBox::warning(this, "Erreur", "Aucune Modification détectée.");
     }
+}
+
+
+void MainWindow::on_pdf_clicked()
+{
+    // Fetch data
+    QSqlQuery query;
+    QList<Consultant> consultants = Consultant::fetchAllConsultants(query);
+
+    // Create HTML content
+    QString html;
+    html += "<h1 style='text-align:center'>Ici la liste de tous les Consultants :</h1>";
+    html += "<table border='1' style='width:100%; border-collapse:collapse'>"
+            "<tr>"
+            "<th>ID</th><th>Nom</th><th>Prénom</th><th>Email</th>"
+            "<th>Téléphone</th><th>Spécialisation</th><th>Expérience</th><th>Disponibilité</th>"
+            "</tr>";
+
+    foreach (const Consultant &c, consultants) {
+        html += QString("<tr>"
+                        "<td>%1</td><td>%2</td><td>%3</td><td>%4</td>"
+                        "<td>%5</td><td>%6</td><td>%7</td><td>%8</td>"
+                        "</tr>")
+                    .arg(c.getIdCon())
+                    .arg(c.getNomCon())
+                    .arg(c.getPrenomCon())
+                    .arg(c.getEmailCon())
+                    .arg(c.getTelCon())
+                    .arg(c.getSpecialisation())
+                    .arg(c.getExperience())
+                    .arg(c.getDisponibilite());
+    }
+    html += "</table>";
+
+    // Create document
+    QTextDocument document;
+    document.setHtml(html);
+
+    // Ensure directory exists
+    QDir().mkpath("Documents_consultant");
+
+    // Set up printer
+    QPrinter printer(QPrinter::HighResolution);
+    printer.setOutputFormat(QPrinter::PdfFormat);
+    printer.setOutputFileName("Documents_consultant/Doc.pdf");
+    printer.setPageSize(QPageSize(QPageSize::A4));
+    printer.setPageMargins(QMarginsF(15, 15, 15, 15));
+
+    // Generate PDF
+    document.print(&printer);
+    QMessageBox::information(this, "Succès", "PDF généré dans Documents_consultant/Doc.pdf");
 }

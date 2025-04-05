@@ -4,6 +4,8 @@
 #include <QMainWindow>
 #include <QMap>
 #include <QPair>
+#include <QPrinter>  // Add this line
+#include <QTextDocument>  // Add this line
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -25,6 +27,8 @@ public:
     void on_ajouter_clicked();
     void on_supp_clicked();
     void on_modifications_clicked();
+//bil slots pdf clieck
+    void on_pdf_clicked();
 private:
     Ui::MainWindow *ui;
 

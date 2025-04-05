@@ -59,11 +59,12 @@ public:
     QPushButton *pdf;
     QLabel *label_18;
     QLabel *label_19;
-    QTextEdit *recherche;
+    QTextEdit *search;
     QTextEdit *id_supp;
     QLabel *label_20;
     QPushButton *supp;
     QComboBox *tri;
+    QPushButton *search_s;
     QWidget *tab_3;
     QWidget *tab_4;
     QWidget *tab_5;
@@ -243,10 +244,10 @@ public:
         label_19->setStyleSheet(QString::fromUtf8("font: 9pt \"Times New Roman\";\n"
 "font-size: 16px ;\n"
 "color: rgb(0, 0, 0);"));
-        recherche = new QTextEdit(tab_2);
-        recherche->setObjectName("recherche");
-        recherche->setGeometry(QRect(450, 40, 161, 21));
-        recherche->setStyleSheet(QString::fromUtf8(""));
+        search = new QTextEdit(tab_2);
+        search->setObjectName("search");
+        search->setGeometry(QRect(450, 40, 101, 21));
+        search->setStyleSheet(QString::fromUtf8(""));
         id_supp = new QTextEdit(tab_2);
         id_supp->setObjectName("id_supp");
         id_supp->setGeometry(QRect(250, 370, 151, 21));
@@ -270,6 +271,13 @@ public:
         tri->setObjectName("tri");
         tri->setGeometry(QRect(110, 40, 111, 22));
         tri->setStyleSheet(QString::fromUtf8("font: 9pt \"Times New Roman\";\n"
+"font-size: 16px ;\n"
+"color:rgb(170, 85, 255);\n"
+"background-color: rgb(255, 170, 255);"));
+        search_s = new QPushButton(tab_2);
+        search_s->setObjectName("search_s");
+        search_s->setGeometry(QRect(560, 40, 61, 20));
+        search_s->setStyleSheet(QString::fromUtf8("font: 9pt \"Times New Roman\";\n"
 "font-size: 16px ;\n"
 "color:rgb(170, 85, 255);\n"
 "background-color: rgb(255, 170, 255);"));
@@ -304,7 +312,7 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -358,6 +366,7 @@ public:
         tri->setItemText(1, QCoreApplication::translate("MainWindow", "ID", nullptr));
         tri->setItemText(2, QCoreApplication::translate("MainWindow", "Nom", nullptr));
 
+        search_s->setText(QCoreApplication::translate("MainWindow", "Envoyer", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QCoreApplication::translate("MainWindow", "Afficher Consultant", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_3), QCoreApplication::translate("MainWindow", "Les Statistiques", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_4), QCoreApplication::translate("MainWindow", "TO DO LIST", nullptr));
