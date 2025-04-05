@@ -17,6 +17,8 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+
+    void on_search_s_clicked();
     void onTabChanged(int index);
     MainWindow(QWidget *parent = nullptr);
     void setupTable() ;
@@ -27,7 +29,6 @@ public:
     void on_ajouter_clicked();
     void on_supp_clicked();
     void on_modifications_clicked();
-//bil slots pdf clieck
     void on_pdf_clicked();
 private:
     Ui::MainWindow *ui;

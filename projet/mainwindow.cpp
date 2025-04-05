@@ -26,6 +26,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->pdf, &QPushButton::clicked, this, &MainWindow::on_pdf_clicked);
     ui->tableau->setEditTriggers(QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed);
     connect(ui->mod, &QPushButton::clicked, this, &MainWindow::on_modifications_clicked);
+    connect(ui->search_s, &QPushButton::clicked, this, &MainWindow::on_search_s_clicked);
 }
 void MainWindow::onTabChanged(int index) {
     if (index == 1) {
@@ -226,4 +227,48 @@ void MainWindow::on_pdf_clicked()
     // Generate PDF
     document.print(&printer);
     QMessageBox::information(this, "Succès", "PDF généré dans Documents_consultant/Doc.pdf");
+}
+void MainWindow::on_search_s_clicked()
+{
+    QString searchTerm = ui->search->toPlainText().trimmed();
+
+    if (searchTerm.isEmpty()) {
+        populateTable();
+        return;
+    }
+
+    // Clear the table
+    ui->tableau->setRowCount(0);
+    originalValues.clear();
+
+
+    QSqlQuery query;
+    QList<Consultant> consultants = Consultant::fetchAllConsultants(query);
+
+
+    for (const Consultant &consultant : consultants) {
+        if (consultant.getNomCon().contains(searchTerm, Qt::CaseInsensitive)) {
+            int row = ui->tableau->rowCount();
+            ui->tableau->insertRow(row);
+
+
+            ui->tableau->setItem(row, 0, new QTableWidgetItem(QString::number(consultant.getIdCon())));
+            ui->tableau->setItem(row, 1, new QTableWidgetItem(consultant.getNomCon()));
+            ui->tableau->setItem(row, 2, new QTableWidgetItem(consultant.getPrenomCon()));
+            ui->tableau->setItem(row, 3, new QTableWidgetItem(consultant.getEmailCon()));
+            ui->tableau->setItem(row, 4, new QTableWidgetItem(QString::number(consultant.getTelCon())));
+            ui->tableau->setItem(row, 5, new QTableWidgetItem(consultant.getSpecialisation()));
+            ui->tableau->setItem(row, 6, new QTableWidgetItem(consultant.getExperience()));
+            ui->tableau->setItem(row, 7, new QTableWidgetItem(consultant.getDisponibilite()));
+
+
+            for (int col = 0; col < ui->tableau->columnCount(); ++col) {
+                originalValues.insert({row, col}, ui->tableau->item(row, col)->text());
+            }
+        }
+    }
+
+    if (ui->tableau->rowCount() == 0) {
+        QMessageBox::information(this, "Recherche", "Aucun consultant trouvé avec ce nom.");
+    }
 }

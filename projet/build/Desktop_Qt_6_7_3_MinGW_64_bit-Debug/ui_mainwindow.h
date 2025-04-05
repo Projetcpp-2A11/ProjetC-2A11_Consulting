@@ -363,8 +363,8 @@ public:
         label_20->setText(QCoreApplication::translate("MainWindow", "Donner L'ID pour suppresion", nullptr));
         supp->setText(QCoreApplication::translate("MainWindow", "Supprimer", nullptr));
         tri->setItemText(0, QCoreApplication::translate("MainWindow", "Votre Choix :", nullptr));
-        tri->setItemText(1, QCoreApplication::translate("MainWindow", "ID", nullptr));
-        tri->setItemText(2, QCoreApplication::translate("MainWindow", "Nom", nullptr));
+        tri->setItemText(1, QCoreApplication::translate("MainWindow", "Nom", nullptr));
+        tri->setItemText(2, QCoreApplication::translate("MainWindow", "Sp\303\251cialisation", nullptr));
 
         search_s->setText(QCoreApplication::translate("MainWindow", "Envoyer", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(tab_2), QCoreApplication::translate("MainWindow", "Afficher Consultant", nullptr));

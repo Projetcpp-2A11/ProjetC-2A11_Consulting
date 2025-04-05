@@ -568,12 +568,12 @@ background-color: rgb(255, 170, 255);</string>
       </item>
       <item>
        <property name="text">
-        <string>ID</string>
+        <string>Nom</string>
        </property>
       </item>
       <item>
        <property name="text">
-        <string>Nom</string>
+        <string>Spécialisation</string>
        </property>
       </item>
      </widget>
