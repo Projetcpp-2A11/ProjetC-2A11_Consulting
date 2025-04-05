@@ -30,6 +30,7 @@ public:
     void on_supp_clicked();
     void on_modifications_clicked();
     void on_pdf_clicked();
+    void on_tri_currentIndexChanged(int index);
 private:
     Ui::MainWindow *ui;
 

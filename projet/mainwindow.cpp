@@ -27,6 +27,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->tableau->setEditTriggers(QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed);
     connect(ui->mod, &QPushButton::clicked, this, &MainWindow::on_modifications_clicked);
     connect(ui->search_s, &QPushButton::clicked, this, &MainWindow::on_search_s_clicked);
+    connect(ui->tri, QOverload<int>::of(&QComboBox::currentIndexChanged),this, &MainWindow::on_tri_currentIndexChanged);
 }
 void MainWindow::onTabChanged(int index) {
     if (index == 1) {
@@ -271,4 +272,22 @@ void MainWindow::on_search_s_clicked()
     if (ui->tableau->rowCount() == 0) {
         QMessageBox::information(this, "Recherche", "Aucun consultant trouvé avec ce nom.");
     }
+}
+void MainWindow::on_tri_currentIndexChanged(int index)
+{
+    int columnToSort = -1;
+    Qt::SortOrder order = Qt::AscendingOrder;
+
+    switch(index) {
+    case 1: // "Nom"
+        columnToSort = 1;
+        break;
+    case 2: // "Spécialisation"
+        columnToSort = 5;
+        break;
+    default:
+        return;
+    }
+
+    ui->tableau->sortItems(columnToSort, order);
 }
