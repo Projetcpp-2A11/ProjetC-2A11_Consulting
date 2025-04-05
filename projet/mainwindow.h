@@ -4,8 +4,23 @@
 #include <QMainWindow>
 #include <QMap>
 #include <QPair>
-#include <QPrinter>  // Add this line
-#include <QTextDocument>  // Add this line
+#include <QPrinter>
+#include <QTextDocument>
+#include <QChartView>
+#include <QPieSeries>
+#include <QBarSeries>
+#include <QBarSet>
+#include <QValueAxis>
+#include <QtCharts/QChartView>
+#include <QtCharts/QBarSeries>
+#include <QtCharts/QBarSet>
+#include <QtCharts/QValueAxis>
+#include <QtCharts/QBarCategoryAxis>
+#include <QtCharts/QPieSeries>
+#include <QVBoxLayout>
+#include <QWidget>
+//QT_CHARTS_USE_NAMESPACE
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -17,9 +32,13 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
+    QChartView *expChartView;
+    QChartView *dispChartView;
+    void onTabChanged(int index);
+    void initCharts();
+    void updateStats();
 
     void on_search_s_clicked();
-    void onTabChanged(int index);
     MainWindow(QWidget *parent = nullptr);
     void setupTable() ;
     QMap<QPair<int, int>, QString> originalValues;

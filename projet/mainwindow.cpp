@@ -28,13 +28,48 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->mod, &QPushButton::clicked, this, &MainWindow::on_modifications_clicked);
     connect(ui->search_s, &QPushButton::clicked, this, &MainWindow::on_search_s_clicked);
     connect(ui->tri, QOverload<int>::of(&QComboBox::currentIndexChanged),this, &MainWindow::on_tri_currentIndexChanged);
+
+    expChartView = nullptr;
+    dispChartView = nullptr;
+    connect(ui->tabWidget, &QTabWidget::currentChanged, this, &MainWindow::onTabChanged);
+    // Initialize charts
 }
+
+void MainWindow::initCharts()
+{
+    // Check if charts already exist
+    if (expChartView && dispChartView) {
+        return;
+    }
+
+    // Create a container widget for charts
+    QWidget *chartsContainer = new QWidget(ui->tab_3); // Parent is tab_3
+    QVBoxLayout *chartsLayout = new QVBoxLayout(chartsContainer);
+
+    // Experience Pie Chart
+    expChartView = new QChartView();
+    expChartView->setRenderHint(QPainter::Antialiasing);
+    chartsLayout->addWidget(expChartView);
+
+    // Availability Bar Chart
+    dispChartView = new QChartView();
+    dispChartView->setRenderHint(QPainter::Antialiasing);
+    chartsLayout->addWidget(dispChartView);
+
+    // Set layout for the statistics tab
+    ui->tab_3->setLayout(new QVBoxLayout());
+    ui->tab_3->layout()->addWidget(chartsContainer);
+}
+
 void MainWindow::onTabChanged(int index) {
     if (index == 1) {
         populateTable();
     }
+    else if (index == 2) {
+        initCharts();
+        updateStats();
+    }
 }
-
 
 MainWindow::~MainWindow()
 {
@@ -290,4 +325,59 @@ void MainWindow::on_tri_currentIndexChanged(int index)
     }
 
     ui->tableau->sortItems(columnToSort, order);
+}
+
+
+void MainWindow::updateStats()
+{
+    QSqlQuery query;
+
+    // Experience Pie Chart
+    QPieSeries *expSeries = new QPieSeries();
+    query.exec("SELECT EXPERIENCE, COUNT(*) FROM CONSULTANT GROUP BY EXPERIENCE");
+    while (query.next()) {
+        expSeries->append(query.value(0).toString(), query.value(1).toInt());
+    }
+
+    QChart *expChart = new QChart();
+    expChart->addSeries(expSeries);
+    expChart->setTitle("Répartition par Expérience");
+    expChart->legend()->setVisible(true);
+    expChart->legend()->setAlignment(Qt::AlignBottom);
+    expSeries->setLabelsVisible();
+    expChartView->setChart(expChart);
+
+    // Availability Bar Chart
+    QBarSeries *dispSeries = new QBarSeries();
+    QBarSet *set = new QBarSet("Disponibilité");
+
+    int ouiCount = 0, nonCount = 0;
+    query.exec("SELECT DISPONIBILITE, COUNT(*) FROM CONSULTANT GROUP BY DISPONIBILITE");
+    while (query.next()) {
+        if (query.value(0).toString() == "Oui") ouiCount = query.value(1).toInt();
+        else nonCount = query.value(1).toInt();
+    }
+
+    *set << ouiCount << nonCount;
+    dispSeries->append(set);
+
+    QChart *dispChart = new QChart();
+    dispChart->addSeries(dispSeries);
+    dispChart->setTitle("Disponibilité");
+    dispChart->legend()->setVisible(true);
+    dispChart->legend()->setAlignment(Qt::AlignBottom);
+
+    // X-axis
+    QStringList categories {"Oui", "Non"};
+    QBarCategoryAxis *axisX = new QBarCategoryAxis();
+    axisX->append(categories);
+    dispChart->addAxis(axisX, Qt::AlignBottom);
+    dispSeries->attachAxis(axisX);
+
+    // Y-axis
+    QValueAxis *axisY = new QValueAxis();
+    dispChart->addAxis(axisY, Qt::AlignLeft);
+    dispSeries->attachAxis(axisY);
+
+    dispChartView->setChart(dispChart);
 }
