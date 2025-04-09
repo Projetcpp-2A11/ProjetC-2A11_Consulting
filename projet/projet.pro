@@ -1,6 +1,6 @@
-QT += core gui sql printsupport charts
+QT += core gui sql printsupport charts svg
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
-
+RESOURCES += ressource.qrc
 CONFIG += c++17
 
 # You can make your code fail to compile if it uses deprecated APIs.

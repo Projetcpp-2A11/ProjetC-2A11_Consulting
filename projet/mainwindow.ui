@@ -73,7 +73,7 @@ QTabBar::tab:hover {
 </string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
@@ -84,8 +84,8 @@ QTabBar::tab:hover {
          <rect>
           <x>0</x>
           <y>0</y>
-          <width>1331</width>
-          <height>1021</height>
+          <width>1298</width>
+          <height>583</height>
          </rect>
         </property>
         <property name="styleSheet">
@@ -140,6 +140,7 @@ border-radius:9px;</string>
     border: 2px solid #4D6F50;
     border-radius: 5px;
     padding: 5px;
+color: black; 
 }
 
 QLineEdit:focus {
@@ -360,7 +361,9 @@ QPushButton:pressed {
     border: 2px solid #4D6F50;
     border-radius: 5px;
     padding: 5px;
+color: black; 
 }
+
 
 QComboBox::drop-down {
     subcontrol-origin: padding;
@@ -456,6 +459,7 @@ QComboBox::down-arrow {
     border: 2px solid #4D6F50;
     border-radius: 5px;
     padding: 5px;
+color: black; 
 }
 
 QLineEdit:focus {
@@ -489,6 +493,7 @@ QLineEdit:focus {
     border: 2px solid #4D6F50;
     border-radius: 5px;
     padding: 5px;
+color: black; 
 }
 
 QLineEdit:focus {
@@ -521,6 +526,7 @@ QLineEdit:focus {
           <string notr="true">QLineEdit {
     border: 2px solid #4D6F50;
     border-radius: 5px;
+color: black; 
     padding: 5px;
 }
 
@@ -555,6 +561,7 @@ QLineEdit:focus {
     border: 2px solid #4D6F50;
     border-radius: 5px;
     padding: 5px;
+color: black; 
 }
 
 QLineEdit:focus {
@@ -587,6 +594,7 @@ QLineEdit:focus {
           <string notr="true">QLineEdit {
     border: 2px solid #4D6F50;
     border-radius: 5px;
+color: black; 
     padding: 5px;
 }
 
@@ -620,8 +628,12 @@ QLineEdit:focus {
           <string notr="true">QLineEdit {
     border: 2px solid #4D6F50;
     border-radius: 5px;
+color: black; 
+
     padding: 5px;
 }
+
+
 
 QLineEdit:focus {
     border: 2px solid #6A9E70;
@@ -700,7 +712,7 @@ border-radius:9px;</string>
 
 QHeaderView::section {
     background-color: #4D6F50; /* Green header */
-    color: white;
+    color: black;
     padding: 5px;
     border: 1px solid #3B5D40;
     font-weight: bold;
@@ -708,6 +720,7 @@ QHeaderView::section {
 
 QTableWidget::item {
     padding: 5px;
+    color: black; /* Add this line */
 }
 
 QTableWidget::item:selected {
@@ -835,6 +848,7 @@ QTableWidget::item:alternate {
     border: 2px solid #4D6F50;
     border-radius: 5px;
     padding: 5px;
+	color : black;
 }
 
 QComboBox::drop-down {
@@ -844,6 +858,7 @@ QComboBox::drop-down {
     border-left-width: 1px;
     border-left-color: #4D6F50;
     border-left-style: solid;
+	color : black;
     border-top-right-radius: 3px;
     border-bottom-right-radius: 3px;
 }
@@ -1015,6 +1030,7 @@ QPushButton:pressed {
     border: 2px solid #4D6F50;
     border-radius: 5px;
     padding: 5px;
+	color: black; 
 }
 
 QLineEdit:focus {
@@ -1048,6 +1064,7 @@ QLineEdit:focus {
     border: 2px solid #4D6F50;
     border-radius: 5px;
     padding: 5px;
+color: black; 
 }
 
 QLineEdit:focus {
@@ -1365,7 +1382,7 @@ QPushButton:pressed {
        <string/>
       </property>
       <property name="pixmap">
-       <pixmap>:/Tools Interface/background.png</pixmap>
+       <pixmap>Tools Interface/background.png</pixmap>
       </property>
       <property name="scaledContents">
        <bool>true</bool>
@@ -1412,11 +1429,20 @@ border-radius:9px;</string>
          <height>61</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel {
+    background-image: url(:/Tools Interface/circle-user-solid.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent; /* Optional: keep background clear */
+}
+</string>
+       </property>
        <property name="text">
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>:/Tools Interface/hands-holding-child-solid.svg</pixmap>
+        <pixmap>Tools Interface/circle-user-solid.svg</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -1468,7 +1494,7 @@ border-radius:9px;</string>
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>:/Tools Interface/calendar-days-solid.svg</pixmap>
+        <pixmap>Tools Interface/calendar-days-solid.svg</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -1516,11 +1542,20 @@ border-radius:9px;</string>
          <height>71</height>
         </rect>
        </property>
+       <property name="styleSheet">
+        <string notr="true">QLabel {
+    background-image: url(:/Tools Interface/briefcase-solid.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color: transparent; /* Optional: keep background clear */
+}
+</string>
+       </property>
        <property name="text">
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>:/Tools Interface/briefcase-solid.svg</pixmap>
+        <pixmap>Tools Interface/briefcase-solid.svg</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -1591,7 +1626,7 @@ border-radius:9px;</string>
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>:/Tools Interface/user-tie-solid.svg</pixmap>
+        <pixmap>Tools Interface/hands-holding-child-solid.svg</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
@@ -1643,12 +1678,25 @@ border-radius:9px;</string>
         <string/>
        </property>
        <property name="pixmap">
-        <pixmap>:/Tools Interface/message-solid.svg</pixmap>
+        <pixmap>Tools Interface/message-solid.svg</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
        </property>
       </widget>
+     </widget>
+     <widget class="QLabel" name="label">
+      <property name="geometry">
+       <rect>
+        <x>376</x>
+        <y>-9</y>
+        <width>231</width>
+        <height>91</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string/>
+      </property>
      </widget>
      <zorder>label_5</zorder>
      <zorder>tabWidget</zorder>
@@ -1657,6 +1705,7 @@ border-radius:9px;</string>
      <zorder>widget_8</zorder>
      <zorder>widget_9</zorder>
      <zorder>widget_7</zorder>
+     <zorder>label</zorder>
     </widget>
    </widget>
   </widget>
