@@ -83,7 +83,8 @@ void Consultant::setDisponibilite(QString disp) {
     disponibilite = disp;
 }
 
-// Validations
+
+//Les Validations
 bool Consultant::validateNomPrenom(const QString &name, QString &error) {
     if (name.length() < 3 || name.length() > 15) {
         error = "Le nom et le prénom doivent contenir entre 3 et 15 caractères.";

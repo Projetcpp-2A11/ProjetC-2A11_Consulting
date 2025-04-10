@@ -9,8 +9,6 @@ bool Connection::createconnect()
 {
     bool test = false;
     QSqlDatabase db = QSqlDatabase::addDatabase("QODBC");
-
-    // Use the DSN name
     db.setDatabaseName("STRATEDGGE");
     db.setUserName("C##nour");
     db.setPassword("esp12");

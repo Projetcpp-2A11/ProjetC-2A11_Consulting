@@ -18,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     
-    // Connect signals to slots
+    // Connection des signals avec les slots
     connect(ui->ajouter, &QPushButton::clicked, this, &MainWindow::on_ajouter_clicked);
     connect(ui->supp, &QPushButton::clicked, this, &MainWindow::on_supp_clicked);
     connect(ui->mod, &QPushButton::clicked, this, &MainWindow::on_modifications_clicked);
@@ -27,15 +27,15 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->tri, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::on_tri_currentIndexChanged);
     connect(ui->tabWidget, &QTabWidget::currentChanged, this, &MainWindow::onTabChanged);
 
-    // Initialize table and charts
+
     setupTable();
     populateTable();
     
-    // Initialize chart views as null pointers
+    // Initialize chart views on null valeur
     expChartView = nullptr;
     dispChartView = nullptr;
     
-    // Enable editing in table
+    // ta5lik tbadel fi table
     ui->tableau->setEditTriggers(QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed);
 }
 
@@ -87,21 +87,20 @@ void MainWindow::initCharts()
         return;
     }
 
-    // Create a container widget for charts
+
     QWidget *chartsContainer = new QWidget(ui->tab_3);
     QVBoxLayout *chartsLayout = new QVBoxLayout(chartsContainer);
 
-    // Experience Pie Chart
+
     expChartView = new QChartView();
     expChartView->setRenderHint(QPainter::Antialiasing);
     chartsLayout->addWidget(expChartView);
 
-    // Availability Bar Chart
+
     dispChartView = new QChartView();
     dispChartView->setRenderHint(QPainter::Antialiasing);
     chartsLayout->addWidget(dispChartView);
 
-    // Set layout for the statistics tab
     ui->tab_3->setLayout(new QVBoxLayout());
     ui->tab_3->layout()->addWidget(chartsContainer);
 }
@@ -110,7 +109,7 @@ void MainWindow::updateStats()
 {
     QSqlQuery query;
 
-    // Experience Pie Chart
+
     QPieSeries *expSeries = new QPieSeries();
     query.exec("SELECT EXPERIENCE, COUNT(*) FROM CONSULTANT GROUP BY EXPERIENCE");
     while (query.next()) {
@@ -125,7 +124,7 @@ void MainWindow::updateStats()
     expSeries->setLabelsVisible();
     expChartView->setChart(expChart);
 
-    // Availability Bar Chart
+
     QBarSeries *dispSeries = new QBarSeries();
     QBarSet *set = new QBarSet("Disponibilité");
 
@@ -189,7 +188,8 @@ void MainWindow::on_ajouter_clicked()
 
     if (consultant.insertIntoDatabase(query)) {
         QMessageBox::information(this, "Succès", "Consultant ajouté avec succès!");
-        // Clear fields after successful addition
+
+        // tfasa5 les fileds b3d addition
         ui->nom->clear();
         ui->prenom->clear();
         ui->email->clear();
@@ -302,21 +302,20 @@ void MainWindow::on_pdf_clicked()
     }
     html += "</table>";
 
-    // Create document
+    // creation d' un Doc
     QTextDocument document;
     document.setHtml(html);
 
-    // Ensure directory exists
+    // Verifer le directoire existe
     QDir().mkpath("Documents_consultant");
 
-    // Set up printer
     QPrinter printer(QPrinter::HighResolution);
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setOutputFileName("Documents_consultant/Doc.pdf");
     printer.setPageSize(QPageSize(QPageSize::A4));
     printer.setPageMargins(QMarginsF(15, 15, 15, 15));
 
-    // Generate PDF
+    // Generatopn de PDF
     document.print(&printer);
     QMessageBox::information(this, "Succès", "PDF généré dans Documents_consultant/Doc.pdf");
 }

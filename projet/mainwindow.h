@@ -35,7 +35,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    // Chart views for statistics
+    // Les charts poura la statisticques
     QChartView *expChartView;
     QChartView *dispChartView;
 
@@ -45,7 +45,7 @@ public:
     void initCharts();
     void updateStats();
 
-    // Original values for tracking modifications
+    // valeur orginal pour la modiacation (tracking system)
     QMap<QPair<int, int>, QString> originalValues;
 
 private slots:
