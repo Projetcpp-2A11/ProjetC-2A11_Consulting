@@ -4,7 +4,7 @@
 #include <QDebug>
 #include "connection.h"
 #include "consult.h"
-
+#include <QIcon>
 
 int main(int argc, char *argv[])
 {
@@ -16,7 +16,7 @@ int main(int argc, char *argv[])
 
     Connection c;
     bool test = c.createconnect();
-
+     a.setWindowIcon(QIcon("C:/Users/nourii/Desktop/Project QT/projet/outils/Logo_Stradedgge.png"));
     if (test) {
 
         w.show();

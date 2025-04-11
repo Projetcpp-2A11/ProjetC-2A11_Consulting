@@ -99,6 +99,7 @@ public:
     QPushButton *reclamation;
     QLabel *label_33;
     QLabel *label;
+    QLabel *label_3;
     QMenuBar *menubar;
     QStatusBar *statusbar;
 
@@ -771,7 +772,7 @@ public:
 "    background-color: transparent; /* Optional: keep background clear */\n"
 "}\n"
 ""));
-        client->setPixmap(QPixmap(QString::fromUtf8(":/Tools Interface/circle-user-solid.svg")));
+        client->setPixmap(QPixmap(QString::fromUtf8(":/Tools Interface/hands-holding-child-solid.svg")));
         client->setScaledContents(true);
         widget_6 = new QWidget(scrollAreaWidgetContents);
         widget_6->setObjectName("widget_6");
@@ -828,7 +829,7 @@ public:
         consultant = new QLabel(widget_9);
         consultant->setObjectName("consultant");
         consultant->setGeometry(QRect(20, 10, 81, 71));
-        consultant->setPixmap(QPixmap(QString::fromUtf8(":/Tools Interface/hands-holding-child-solid.svg")));
+        consultant->setPixmap(QPixmap(QString::fromUtf8(":/Tools Interface/circle-user-solid.svg")));
         consultant->setScaledContents(true);
         widget_7 = new QWidget(scrollAreaWidgetContents);
         widget_7->setObjectName("widget_7");
@@ -848,6 +849,10 @@ public:
         label = new QLabel(scrollAreaWidgetContents);
         label->setObjectName("label");
         label->setGeometry(QRect(376, -9, 231, 91));
+        label_3 = new QLabel(scrollAreaWidgetContents);
+        label_3->setObjectName("label_3");
+        label_3->setGeometry(QRect(-10, -30, 191, 151));
+        label_3->setPixmap(QPixmap(QString::fromUtf8(":/Tools Interface/mon_icone.png")));
         scrollArea->setWidget(scrollAreaWidgetContents);
         label_5->raise();
         tabWidget->raise();
@@ -857,6 +862,7 @@ public:
         widget_9->raise();
         widget_7->raise();
         label->raise();
+        label_3->raise();
         MainWindow->setCentralWidget(centralwidget);
         menubar = new QMenuBar(MainWindow);
         menubar->setObjectName("menubar");
@@ -949,6 +955,7 @@ public:
         reclamation->setText(QCoreApplication::translate("MainWindow", "R\303\251clamation", nullptr));
         label_33->setText(QString());
         label->setText(QString());
+        label_3->setText(QString());
     } // retranslateUi
 
 };
