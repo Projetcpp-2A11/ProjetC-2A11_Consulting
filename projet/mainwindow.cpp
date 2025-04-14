@@ -12,6 +12,7 @@
 #include <QPrintDialog>
 #include <QPageSize>
 #include <QMarginsF>
+#include <QTimer>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -19,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     initialiserOngletToDo();
+    initializeChatBot();
     // Connection des signals avec les slots
     connect(ui->ajouter, &QPushButton::clicked, this, &MainWindow::on_ajouter_clicked);
     connect(ui->supp, &QPushButton::clicked, this, &MainWindow::on_supp_clicked);
@@ -531,4 +533,143 @@ void MainWindow::on_supprimerTache_clicked() {
 
 void MainWindow::on_rafraichirListe_clicked() {
     chargerListeTaches();
+}
+void MainWindow::initializeChatBot()
+{
+    QWidget *chatWidget = ui->tab_5;
+    QVBoxLayout *mainLayout = new QVBoxLayout(chatWidget);
+
+    // Chat History
+    chatHistory = new QListWidget();
+    chatHistory->setStyleSheet(
+        "QListWidget {"
+        "   background-color: #f0f4f8;"
+        "   border-radius: 15px;"
+        "   padding: 10px;"
+        "}"
+        "QListWidget::item {"
+        "   background-color: #ffffff;"
+        "   border-radius: 10px;"
+        "   margin: 5px;"
+        "   padding: 10px;"
+        "}"
+        "QListWidget::item:selected {"
+        "   background-color: #e3f2fd;"
+        "}"
+        );
+    chatHistory->setWordWrap(true);
+    chatHistory->setSpacing(5);
+
+    // Input Area
+    QWidget *inputWidget = new QWidget();
+    QHBoxLayout *inputLayout = new QHBoxLayout(inputWidget);
+
+    messageInput = new QLineEdit();
+    messageInput->setPlaceholderText("taper ton message ici...");
+    messageInput->setStyleSheet(
+        "QLineEdit {"
+        "   border: 2px solid #4D6F50;"
+        "   border-radius: 15px;"
+        "   padding: 10px 15px;"
+        "   font-size: 14px;"
+        "}"
+        "QLineEdit:focus {"
+        "   border-color: #6A9E70;"
+        "}"
+        );
+
+    sendButton = new QPushButton("Envoyer!");
+    sendButton->setStyleSheet(
+        "QPushButton {"
+        "   background-color: #4D6F50;"
+        "   color: white;"
+        "   border-radius: 15px;"
+        "   padding: 10px 20px;"
+        "   font-weight: bold;"
+        "}"
+        "QPushButton:hover {"
+        "   background-color: #6A8A63;"
+        "}"
+        "QPushButton:pressed {"
+        "   background-color: #3B5D40;"
+        "}"
+        );
+    sendButton->setCursor(Qt::PointingHandCursor);
+
+    inputLayout->addWidget(messageInput);
+    inputLayout->addWidget(sendButton);
+    inputLayout->setStretch(0, 5);
+    inputLayout->setStretch(1, 1);
+
+    // Add welcome message
+    QListWidgetItem *welcomeItem = new QListWidgetItem("🤖 Bienvenue dans le ConsultantBot! comment je peux aider ?");
+    welcomeItem->setTextAlignment(Qt::AlignLeft);
+    chatHistory->addItem(welcomeItem);
+
+    mainLayout->addWidget(chatHistory);
+    mainLayout->addWidget(inputWidget);
+
+    // Connect signals
+    connect(sendButton, &QPushButton::clicked, this, &MainWindow::onSendMessage);
+    connect(messageInput, &QLineEdit::returnPressed, this, &MainWindow::onSendMessage);
+}
+
+void MainWindow::onSendMessage()
+{
+    QString message = messageInput->text().trimmed();
+    if(message.isEmpty()) return;
+
+    // Add user message
+    QListWidgetItem *userItem = new QListWidgetItem("👤 " + message);
+    userItem->setTextAlignment(Qt::AlignRight);
+    userItem->setForeground(QColor("#2c3e50"));
+    chatHistory->addItem(userItem);
+
+    // Clear input
+    messageInput->clear();
+
+    // Simulate bot response
+    QTimer::singleShot(500, this, [this, message]() {
+        handleBotResponse(message);
+    });
+}
+
+
+
+
+
+
+void MainWindow::handleBotResponse(const QString &userMessage)
+{
+    QString response = "🤖 Je suis un chatbot basique. Voici les commandes que je comprends :\n"
+                       "- 'help' - Afficher l'aide\n"
+                       "- 'about' - À propos du logiciel\n"
+                       "- 'contact' - Informations de contact\n"
+                       "- 'commands' - Lister les commandes disponibles";
+
+    QString lowerMsg = userMessage.toLower();
+
+    if(lowerMsg == "help") {
+        response = "🤖 Vous pouvez me demander :\n- Gestion des consultants\n- Suivi des tâches\n- Génération de rapports\n- Informations système";
+    }
+    else if(lowerMsg == "about") {
+        response = "🤖 Système de Gestion de Consultants v1.0\nDéveloppé avec Qt/C++\n© 2024 STRATEDGE";
+    }
+    else if(lowerMsg == "contact") {
+        response = "🤖 Contactez-nous :\nsupport@STRATEDDGE.com\n+216 70-567-890";
+    }
+    else if(lowerMsg == "commands") {
+        response = "🤖 Commandes disponibles :\n- help\n- about\n- contact\n- commands\n- clear";
+    }
+    else if(lowerMsg == "clear") {
+        chatHistory->clear();
+        QListWidgetItem *welcomeItem = new QListWidgetItem("🤖 Historique effacé !");
+        chatHistory->addItem(welcomeItem);
+        return;
+    }
+
+    QListWidgetItem *botItem = new QListWidgetItem(response);
+    botItem->setForeground(QColor("#4D6F50"));
+    chatHistory->addItem(botItem);
+    chatHistory->scrollToBottom();
 }

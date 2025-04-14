@@ -1,8 +1,10 @@
 #include "todo.h"
 #include <QSqlError> // Add this include for QSqlError
+#include <QDebug>
 
 bool ToDo::ajouterTache(int idConsultant, const QString &tache, QSqlQuery &query) {
-    query.prepare("INSERT INTO ToDo (ID_CON, TACHE) VALUES (:id, :tache)");
+    // Use the full schema name and exact table name
+    query.prepare("INSERT INTO \"C##NOUR\".\"ToDo\" (ID_CON, TACHE) VALUES (:id, :tache)");
     query.bindValue(":id", idConsultant);
     query.bindValue(":tache", tache);
 
@@ -14,7 +16,8 @@ bool ToDo::ajouterTache(int idConsultant, const QString &tache, QSqlQuery &query
 }
 
 bool ToDo::supprimerTache(int idConsultant, const QString &tache, QSqlQuery &query) {
-    query.prepare("DELETE FROM ToDo WHERE ID_CON = :id AND TACHE = :tache");
+    // Use the full schema name and exact table name
+    query.prepare("DELETE FROM \"C##NOUR\".\"ToDo\" WHERE ID_CON = :id AND TACHE = :tache");
     query.bindValue(":id", idConsultant);
     query.bindValue(":tache", tache);
 
@@ -28,7 +31,8 @@ bool ToDo::supprimerTache(int idConsultant, const QString &tache, QSqlQuery &que
 QList<QPair<int, QString>> ToDo::recupererTousLesTaches(QSqlQuery &query) {
     QList<QPair<int, QString>> taches;
 
-    if (!query.exec("SELECT ID_CON, TACHE FROM ToDo ORDER BY ID_CON")) {
+    // Use the full schema name and exact table name
+    if (!query.exec("SELECT ID_CON, TACHE FROM \"C##NOUR\".\"ToDo\" ORDER BY ID_CON")) {
         qDebug() << "Error fetching tasks:" << query.lastError().text();
         return taches;
     }
@@ -41,7 +45,8 @@ QList<QPair<int, QString>> ToDo::recupererTousLesTaches(QSqlQuery &query) {
 }
 
 bool ToDo::verifierIdExiste(int idConsultant, QSqlQuery &query) {
-    query.prepare("SELECT ID_CON FROM CONSULTANT WHERE ID_CON = :id");
+    // Use the full schema name and exact table name
+    query.prepare("SELECT ID_CON FROM \"C##NOUR\".\"CONSULTANT\" WHERE ID_CON = :id");
     query.bindValue(":id", idConsultant);
 
     if (!query.exec()) {

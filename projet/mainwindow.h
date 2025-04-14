@@ -64,13 +64,23 @@ public:
     void initCharts();
     void updateStats();
 
+    void on_modifications_clicked();
     // valeur orginal pour la modiacation (tracking system)
     QMap<QPair<int, int>, QString> originalValues;
+
+    // Add to private members
+    QListWidget *chatHistory;
+    QLineEdit *messageInput;
+    QPushButton *sendButton;
+    void initializeChatBot();
+    // Add to private slots
+    void onSendMessage();
+    void handleBotResponse(const QString &userMessage);
 
 private slots:
     void on_ajouter_clicked();
     void on_supp_clicked();
-    void on_modifications_clicked();
+
     void on_pdf_clicked();
     void on_search_s_clicked();
     void on_tri_currentIndexChanged(int index);
