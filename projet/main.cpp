@@ -2,6 +2,7 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QDebug>
+#include "todo.h"
 #include "connection.h"
 #include "consult.h"
 #include <QIcon>

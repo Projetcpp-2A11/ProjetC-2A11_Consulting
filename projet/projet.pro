@@ -11,12 +11,14 @@ SOURCES += \
     connection.cpp \
     consult.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    todo.cpp
 
 HEADERS += \
     connection.h \
     consult.h \
-    mainwindow.h
+    mainwindow.h \
+    todo.h
 
 FORMS += \
     mainwindow.ui

@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "todo.h"
 #include "connection.h"
 #include "consult.h"
 #include <QSqlQuery>
@@ -17,7 +18,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    
+    initialiserOngletToDo();
     // Connection des signals avec les slots
     connect(ui->ajouter, &QPushButton::clicked, this, &MainWindow::on_ajouter_clicked);
     connect(ui->supp, &QPushButton::clicked, this, &MainWindow::on_supp_clicked);
@@ -308,7 +309,6 @@ void MainWindow::on_pdf_clicked()
 
     // Verifer le directoire existe
     QDir().mkpath("Documents_consultant");
-
     QPrinter printer(QPrinter::HighResolution);
     printer.setOutputFormat(QPrinter::PdfFormat);
     printer.setOutputFileName("Documents_consultant/Doc.pdf");
@@ -378,4 +378,157 @@ void MainWindow::on_tri_currentIndexChanged(int index)
     }
 
     ui->tableau->sortItems(columnToSort, order);
+}
+
+
+
+
+void MainWindow::initialiserOngletToDo() {
+    QWidget *widgetToDo = ui->tab_4;
+    QVBoxLayout *layoutPrincipal = new QVBoxLayout(widgetToDo);
+
+    // Title
+    QLabel *titre = new QLabel("Liste des Tâches à Faire");
+    titre->setStyleSheet("QLabel { color: #4D6F50; font-size: 20px; font-weight: bold; }");
+    titre->setAlignment(Qt::AlignCenter);
+    layoutPrincipal->addWidget(titre);
+
+    // Input area
+    QWidget *zoneSaisie = new QWidget();
+    QHBoxLayout *layoutSaisie = new QHBoxLayout(zoneSaisie);
+
+    QLabel *labelId = new QLabel("ID Consultant:");
+    labelId->setStyleSheet("color: #4D6F50; font-weight: bold;");
+    inputIdConsultant = new QLineEdit();
+    inputIdConsultant->setPlaceholderText("Entrez l'ID du consultant");
+    inputIdConsultant->setStyleSheet("QLineEdit { border: 2px solid #4D6F50; border-radius: 5px; padding: 5px; }");
+
+    QLabel *labelTache = new QLabel("Tâche:");
+    labelTache->setStyleSheet("color: #4D6F50; font-weight: bold;");
+    inputTache = new QLineEdit();
+    inputTache->setPlaceholderText("Entrez la tâche à ajouter");
+    inputTache->setStyleSheet("QLineEdit { border: 2px solid #4D6F50; border-radius: 5px; padding: 5px; }");
+
+    layoutSaisie->addWidget(labelId);
+    layoutSaisie->addWidget(inputIdConsultant);
+    layoutSaisie->addWidget(labelTache);
+    layoutSaisie->addWidget(inputTache);
+    layoutSaisie->setStretch(1, 2);
+    layoutSaisie->setStretch(3, 3);
+
+    // Buttons area
+    QWidget *zoneBoutons = new QWidget();
+    QHBoxLayout *layoutBoutons = new QHBoxLayout(zoneBoutons);
+
+    boutonAjouter = new QPushButton("Ajouter Tâche");
+    boutonSupprimer = new QPushButton("Supprimer Tâche");
+    boutonRafraichir = new QPushButton("Rafraîchir Liste");
+
+    // Style buttons to match your existing design
+    QString styleBouton = "QPushButton {"
+                          "background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1,"
+                          "stop:0 rgba(193, 179, 255, 200), stop:1 rgba(255, 228, 196, 200));"
+                          "color: #4A4A4A; border-radius: 10px; border: 1px solid rgba(74, 74, 74, 50);"
+                          "padding: 8px 15px; font-size: 14px; font-weight: bold; }"
+                          "QPushButton:hover {"
+                          "background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1,"
+                          "stop:0 rgba(170, 153, 255, 200), stop:1 rgba(255, 204, 153, 200));"
+                          "color: black; }"
+                          "QPushButton:pressed { background: rgba(193, 179, 255, 180); }";
+
+    boutonAjouter->setStyleSheet(styleBouton);
+    boutonSupprimer->setStyleSheet(styleBouton);
+    boutonRafraichir->setStyleSheet(styleBouton);
+
+    layoutBoutons->addWidget(boutonAjouter);
+    layoutBoutons->addWidget(boutonSupprimer);
+    layoutBoutons->addWidget(boutonRafraichir);
+
+    // Task list
+    listeTaches = new QListWidget();
+    listeTaches->setStyleSheet("QListWidget { border: 2px solid #4D6F50; border-radius: 5px; }"
+                               "QListWidget::item { padding: 5px; border-bottom: 1px solid #E0E0E0; }"
+                               "QListWidget::item:hover { background-color: #E8F5E9; }");
+
+    // Add widgets to main layout
+    layoutPrincipal->addWidget(zoneSaisie);
+    layoutPrincipal->addWidget(zoneBoutons);
+    layoutPrincipal->addWidget(listeTaches);
+
+    // Connect signals
+    connect(boutonAjouter, &QPushButton::clicked, this, &MainWindow::on_ajouterTache_clicked);
+    connect(boutonSupprimer, &QPushButton::clicked, this, &MainWindow::on_supprimerTache_clicked);
+    connect(boutonRafraichir, &QPushButton::clicked, this, &MainWindow::on_rafraichirListe_clicked);
+
+    // Load initial tasks
+    chargerListeTaches();
+}
+
+
+
+
+void MainWindow::chargerListeTaches() {
+    listeTaches->clear();
+
+    QSqlQuery query;
+    QList<QPair<int, QString>> taches = ToDo::recupererTousLesTaches(query);
+
+    for (const auto &tache : taches) {
+        QString itemText = QString("Consultant ID: %1 - Tâche: %2").arg(tache.first).arg(tache.second);
+        QListWidgetItem *item = new QListWidgetItem(itemText, listeTaches);
+        item->setData(Qt::UserRole, QVariant::fromValue(tache));
+    }
+}
+
+void MainWindow::on_ajouterTache_clicked() {
+    QString tache = inputTache->text().trimmed();
+    bool ok;
+    int idConsultant = inputIdConsultant->text().toInt(&ok);
+
+    if (!ok || idConsultant <= 0) {
+        QMessageBox::warning(this, "Erreur", "Veuillez entrer un ID valide.");
+        return;
+    }
+
+    if (tache.isEmpty()) {
+        QMessageBox::warning(this, "Erreur", "Veuillez entrer une tâche.");
+        return;
+    }
+
+    QSqlQuery query;
+    if (!ToDo::verifierIdExiste(idConsultant, query)) {
+        QMessageBox::warning(this, "Erreur", "Identifiant n'existe pas");
+        return;
+    }
+
+    if (ToDo::ajouterTache(idConsultant, tache, query)) {
+        QMessageBox::information(this, "Succès", "Tâche ajoutée avec succès!");
+        inputTache->clear();
+        chargerListeTaches();
+    } else {
+        QMessageBox::warning(this, "Erreur", "Échec de l'ajout de la tâche.");
+    }
+}
+
+void MainWindow::on_supprimerTache_clicked() {
+    QListWidgetItem *itemSelectionne = listeTaches->currentItem();
+
+    if (!itemSelectionne) {
+        QMessageBox::warning(this, "Erreur", "Veuillez sélectionner une tâche à supprimer.");
+        return;
+    }
+
+    QPair<int, QString> tache = itemSelectionne->data(Qt::UserRole).value<QPair<int, QString>>();
+
+    QSqlQuery query;
+    if (ToDo::supprimerTache(tache.first, tache.second, query)) {
+        QMessageBox::information(this, "Succès", "Tâche supprimée avec succès!");
+        chargerListeTaches();
+    } else {
+        QMessageBox::warning(this, "Erreur", "Échec de la suppression de la tâche.");
+    }
+}
+
+void MainWindow::on_rafraichirListe_clicked() {
+    chargerListeTaches();
 }

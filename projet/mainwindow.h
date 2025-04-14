@@ -1,6 +1,6 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
-
+#include "todo.h"
 #include <QMainWindow>
 #include <QMessageBox>
 #include <QMap>
@@ -20,6 +20,10 @@
 #include <QtCharts/QPieSeries>
 #include <QVBoxLayout>
 #include <QWidget>
+// Add these missing includes
+#include <QListWidget>
+#include <QLineEdit>
+#include <QPushButton>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -39,7 +43,22 @@ public:
     QChartView *expChartView;
     QChartView *dispChartView;
 
-    // UI setup methods
+    void on_ajouterTache_clicked();
+    void on_supprimerTache_clicked();
+    void on_rafraichirListe_clicked();
+    void chargerListeTaches();
+
+    // Add initialiserOngletToDo to the declaration
+    void initialiserOngletToDo();
+
+    // Add this to private members
+    QListWidget *listeTaches;
+    QLineEdit *inputIdConsultant;
+    QLineEdit *inputTache;
+    QPushButton *boutonAjouter;
+    QPushButton *boutonSupprimer;
+    QPushButton *boutonRafraichir;
+
     void setupTable();
     void populateTable();
     void initCharts();
