@@ -1,6 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "todo.h"
+#include <QSerialPort>
 #include "connection.h"
 #include "consult.h"
 #include <QSqlQuery>
@@ -21,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     initialiserOngletToDo();
     initializeChatBot();
+    QTimer::singleShot(1000, this, &MainWindow::checkArduinoConnection);
     // Connection des signals avec les slots
     connect(ui->ajouter, &QPushButton::clicked, this, &MainWindow::on_ajouter_clicked);
     connect(ui->supp, &QPushButton::clicked, this, &MainWindow::on_supp_clicked);
@@ -30,7 +32,40 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->tri, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::on_tri_currentIndexChanged);
     connect(ui->tabWidget, &QTabWidget::currentChanged, this, &MainWindow::onTabChanged);
 
+    //arduino
 
+    // arduino initialization
+    arduino = new QSerialPort(this);
+    arduino_is_available = false;
+
+    foreach(const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()) {
+        // Check if the serial port has both a vendor and product ID
+        if(serialPortInfo.hasVendorIdentifier() && serialPortInfo.hasProductIdentifier()) {
+            // Here you should check against your specific Arduino's vendor and product IDs
+            // For example, for an Arduino Uno:
+            // if(serialPortInfo.vendorIdentifier() == 0x2341 && serialPortInfo.productIdentifier() == 0x0043)
+            arduino_is_available = true;
+            arduino->setPortName(serialPortInfo.portName());
+        }
+    }
+
+    if(arduino_is_available) {
+        if(arduino->open(QSerialPort::ReadWrite)) {
+            arduino->setBaudRate(QSerialPort::Baud9600);
+            arduino->setDataBits(QSerialPort::Data8);
+            arduino->setParity(QSerialPort::NoParity);
+            arduino->setStopBits(QSerialPort::OneStop);
+            arduino->setFlowControl(QSerialPort::NoFlowControl);
+        } else {
+            QMessageBox::warning(this, "Port error", "Couldn't open serial port!");
+            arduino_is_available = false;
+        }
+    } else {
+        QMessageBox::warning(this, "Port error", "Couldn't find the Arduino!");
+    }
+    // fin arduino
+
+    // fin arduino
     setupTable();
     populateTable();
     
@@ -44,6 +79,9 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    if(arduino->isOpen()){
+        arduino->close();
+    }
     delete ui;
 }
 
@@ -672,4 +710,50 @@ void MainWindow::handleBotResponse(const QString &userMessage)
     botItem->setForeground(QColor("#4D6F50"));
     chatHistory->addItem(botItem);
     chatHistory->scrollToBottom();
+}
+
+
+
+            // arduinoooo
+
+
+void MainWindow::on_connectButton_clicked()
+{
+    checkArduinoConnection();
+}
+
+
+
+void MainWindow::showConnectionStatus(bool connected)
+{
+    if(connected) {
+        QMessageBox::information(this, "Connection Status",
+                                 "Arduino is connected and responding!");
+    } else {
+        QMessageBox::critical(this, "Connection Status",
+                              "Arduino is not connected or not responding!");
+    }
+}
+
+void MainWindow::checkArduinoConnection()
+{
+    if(arduino_is_available && arduino->isOpen()) {
+        arduino->write("C"); // Send test command
+
+        if(arduino->waitForReadyRead(1000)) { // Wait 1 second for response
+            QByteArray response = arduino->readAll();
+            while(arduino->waitForReadyRead(10)) {
+                response += arduino->readAll();
+            }
+
+            if(response.contains('A')) {
+                qDebug() << "SUCCESS: Arduino is connected and responding!";
+                showConnectionStatus(true);
+                return;
+            }
+        }
+    }
+
+    qDebug() << "ERROR: Arduino not connected or not responding!";
+    showConnectionStatus(false);
 }

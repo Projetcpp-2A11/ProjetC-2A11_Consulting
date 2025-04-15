@@ -5,6 +5,7 @@
 #include <QMessageBox>
 #include <QMap>
 #include <QPair>
+#include <QSerialPortInfo>
 #include <QPrinter>
 #include <QTextDocument>
 #include <QChartView>
@@ -20,10 +21,10 @@
 #include <QtCharts/QPieSeries>
 #include <QVBoxLayout>
 #include <QWidget>
-// Add these missing includes
 #include <QListWidget>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QSerialPort>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -76,6 +77,15 @@ public:
     // Add to private slots
     void onSendMessage();
     void handleBotResponse(const QString &userMessage);
+
+    //ardunio
+    void on_connectButton_clicked();
+    void checkArduinoConnection();
+
+    QSerialPort *arduino;
+    bool arduino_is_available;
+    void showConnectionStatus(bool connected);
+
 
 private slots:
     void on_ajouter_clicked();
