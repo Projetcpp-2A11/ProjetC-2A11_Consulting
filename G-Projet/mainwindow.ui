@@ -2001,7 +2001,7 @@ QComboBox::down-arrow {
       </widget>
       <widget class="QWidget" name="tab_4">
        <attribute name="title">
-        <string>Page</string>
+        <string>IA Assistant</string>
        </attribute>
        <widget class="QWidget" name="widget" native="true">
         <property name="geometry">
