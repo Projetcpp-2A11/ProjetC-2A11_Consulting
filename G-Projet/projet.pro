@@ -12,13 +12,11 @@ SOURCES += \
     main.cpp \
     mainwindow.cpp \
     projet.cpp \
-    connection.cpp \
-
+    connection.cpp
 HEADERS += \
     mainwindow.h \
     projet.h \
-    connection.h \
-
+    connection.h
 
 FORMS += \
     mainwindow.ui
