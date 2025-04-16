@@ -73,7 +73,7 @@ QTabBar::tab:hover {
 </string>
       </property>
       <property name="currentIndex">
-       <number>3</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
@@ -283,9 +283,9 @@ QLineEdit:focus {
         <widget class="QPushButton" name="ajouter">
          <property name="geometry">
           <rect>
-           <x>1190</x>
+           <x>1177</x>
            <y>530</y>
-           <width>88</width>
+           <width>101</width>
            <height>32</height>
           </rect>
          </property>
@@ -673,6 +673,51 @@ font: 12pt &quot;Segoe UI&quot;;</string>
          </property>
          <property name="text">
           <string>Non</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="reset">
+         <property name="geometry">
+          <rect>
+           <x>1020</x>
+           <y>530</y>
+           <width>131</width>
+           <height>32</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <family>Sitka</family>
+           <pointsize>-1</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1,
+                                stop:0 rgba(193, 179, 255, 200), 
+                                stop:1 rgba(255, 228, 196, 200));
+    color: #4A4A4A;
+    border-radius: 10px;
+    border: 1px solid rgba(74, 74, 74, 50);
+    padding: 8px 15px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1,
+                                stop:0 rgba(170, 153, 255, 200), 
+                                stop:1 rgba(255, 204, 153, 200));
+    color: black;
+}
+
+QPushButton:pressed {
+    background: rgba(193, 179, 255, 180);
+}
+</string>
+         </property>
+         <property name="text">
+          <string>Réinitialiser</string>
          </property>
         </widget>
        </widget>

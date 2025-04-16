@@ -31,8 +31,8 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->search_s, &QPushButton::clicked, this, &MainWindow::on_search_s_clicked);
     connect(ui->tri, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::on_tri_currentIndexChanged);
     connect(ui->tabWidget, &QTabWidget::currentChanged, this, &MainWindow::onTabChanged);
+    connect(ui->reset, &QPushButton::clicked, this, &MainWindow::on_reset_clicked);
 
-    //arduino
 
     // arduino initialization
     arduino = new QSerialPort(this);
@@ -420,7 +420,27 @@ void MainWindow::on_tri_currentIndexChanged(int index)
     ui->tableau->sortItems(columnToSort, order);
 }
 
+void MainWindow::on_reset_clicked()
+{
 
+    ui->nom->clear();
+    ui->prenom->clear();
+    ui->email->clear();
+    ui->tele->clear();
+    ui->spec->clear();
+    ui->histo->clear();
+    ui->eval->clear();
+
+    ui->list->setCurrentIndex(0);
+
+
+    ui->oui->setAutoExclusive(false);
+    ui->non->setAutoExclusive(false);
+    ui->oui->setChecked(false);
+    ui->non->setChecked(false);
+    ui->oui->setAutoExclusive(true);
+    ui->non->setAutoExclusive(true);
+}
 
 
 void MainWindow::initialiserOngletToDo() {
@@ -757,3 +777,4 @@ void MainWindow::checkArduinoConnection()
     qDebug() << "ERROR: Arduino not connected or not responding!";
     showConnectionStatus(false);
 }
+

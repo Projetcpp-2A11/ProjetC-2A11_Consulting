@@ -64,7 +64,7 @@ public:
     void populateTable();
     void initCharts();
     void updateStats();
-
+    void on_reset_clicked();
     void on_modifications_clicked();
     // valeur orginal pour la modiacation (tracking system)
     QMap<QPair<int, int>, QString> originalValues;
