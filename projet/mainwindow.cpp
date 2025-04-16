@@ -32,7 +32,7 @@ MainWindow::MainWindow(QWidget *parent)
     connect(ui->tri, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &MainWindow::on_tri_currentIndexChanged);
     connect(ui->tabWidget, &QTabWidget::currentChanged, this, &MainWindow::onTabChanged);
     connect(ui->reset, &QPushButton::clicked, this, &MainWindow::on_reset_clicked);
-
+    connect(ui->reset_table, &QPushButton::clicked, this, &MainWindow::on_reset_table_clicked);
 
     // arduino initialization
     arduino = new QSerialPort(this);
@@ -61,9 +61,8 @@ MainWindow::MainWindow(QWidget *parent)
             arduino_is_available = false;
         }
     } else {
-        QMessageBox::warning(this, "Port error", "Couldn't find the Arduino!");
+        //QMessageBox::warning(this, "Port error", "Couldn't find the Arduino!");
     }
-    // fin arduino
 
     // fin arduino
     setupTable();
@@ -357,8 +356,23 @@ void MainWindow::on_pdf_clicked()
 
     // Generatopn de PDF
     document.print(&printer);
-    QMessageBox::information(this, "Succès", "PDF généré dans Documents_consultant/Doc.pdf");
+    //QMessageBox::information(this, "Succès", "PDF généré dans Documents_consultant/Doc.pdf");
 }
+
+
+void MainWindow::on_reset_table_clicked()
+{
+
+    ui->search->clear();
+
+
+    ui->tri->setCurrentIndex(0);
+
+    populateTable();
+
+    //QMessageBox::information(this, "Réinitialisation", "La table a été réinitialisée à son ordre original.");
+}
+
 
 void MainWindow::on_search_s_clicked()
 {
@@ -523,6 +537,67 @@ void MainWindow::initialiserOngletToDo() {
     // Load initial tasks
     chargerListeTaches();
 }
+
+
+
+
+
+int MainWindow::getTotalConsultants() {
+    QSqlQuery query;
+    query.exec("SELECT COUNT(*) FROM CONSULTANT");
+    if (query.next()) {
+        return query.value(0).toInt();
+    }
+    return 0;
+}
+
+QPair<int, int> MainWindow::getAvailabilityStats() {
+    QSqlQuery query;
+    int ouiCount = 0, nonCount = 0;
+
+    query.exec("SELECT DISPONIBILITE, COUNT(*) FROM CONSULTANT GROUP BY DISPONIBILITE");
+    while (query.next()) {
+        if (query.value(0).toString() == "Oui") {
+            ouiCount = query.value(1).toInt();
+        } else {
+            nonCount = query.value(1).toInt();
+        }
+    }
+
+    return qMakePair(ouiCount, nonCount);
+}
+
+QMap<QString, int> MainWindow::getExperienceStats() {
+    QSqlQuery query;
+    QMap<QString, int> experienceMap;
+
+    // Initialize all possible experience levels
+    QStringList experiences = {"1 an", "2 ans", "3 ans", "4 ans", "5 ans"};
+    for (const QString &exp : experiences) {
+        experienceMap[exp] = 0;
+    }
+
+    query.exec("SELECT EXPERIENCE, COUNT(*) FROM CONSULTANT GROUP BY EXPERIENCE");
+    while (query.next()) {
+        QString exp = query.value(0).toString();
+        int count = query.value(1).toInt();
+        experienceMap[exp] = count;
+    }
+
+    return experienceMap;
+}
+
+int MainWindow::getTotalTasks() {
+    QSqlQuery query;
+    query.exec("SELECT COUNT(*) FROM TODO");
+    if (query.next()) {
+        return query.value(0).toInt();
+    }
+    return 0;
+}
+
+
+
 
 
 
@@ -694,21 +769,71 @@ void MainWindow::onSendMessage()
 
 
 
-
-
-
 void MainWindow::handleBotResponse(const QString &userMessage)
 {
-    QString response = "🤖 Je suis un chatbot basique. Voici les commandes que je comprends :\n"
-                       "- 'help' - Afficher l'aide\n"
-                       "- 'about' - À propos du logiciel\n"
-                       "- 'contact' - Informations de contact\n"
-                       "- 'commands' - Lister les commandes disponibles";
-
     QString lowerMsg = userMessage.toLower();
+    QString response;
 
-    if(lowerMsg == "help") {
-        response = "🤖 Vous pouvez me demander :\n- Gestion des consultants\n- Suivi des tâches\n- Génération de rapports\n- Informations système";
+    // Action commands
+    if(lowerMsg == "export pdf") {
+        on_pdf_clicked();
+        response = "🤖 J'ai exporté le tableau en PDF avec succès!";
+    }
+    else if(lowerMsg == "reset table") {
+        on_reset_table_clicked();
+        response = "🤖 Le tableau a été réinitialisé à son ordre original!";
+    }
+    // New database interaction commands
+    else if(lowerMsg == "total des consultants") {
+        int total = getTotalConsultants();
+        response = QString("🤖 Nombre total des consultants est %1").arg(total);
+    }
+    else if(lowerMsg == "disponibilité des consultants") {
+        QPair<int, int> availability = getAvailabilityStats();
+        int ouiCount = availability.first;
+        int nonCount = availability.second;
+
+        response = QString("🤖 Ici, les consultants qui sont disponible: %1\n"
+                           "Et les consultants qui ne sont pas disponible: %2\n")
+                       .arg(ouiCount).arg(nonCount);
+
+        if (ouiCount > nonCount) {
+            response += "Les consultants disponibles sont les plus dominants.";
+        } else if (nonCount > ouiCount) {
+            response += "Les consultants non disponibles sont les plus dominants.";
+        } else {
+            response += "Il y a égalité entre consultants disponibles et non disponibles.";
+        }
+    }
+    else if(lowerMsg == "donner moi les expériences existe") {
+        QMap<QString, int> experienceStats = getExperienceStats();
+
+        response = "🤖 Répartition par expérience:\n";
+        response += QString("- 1 an: %1 consultants\n").arg(experienceStats["1 an"]);
+        response += QString("- 2 ans: %1 consultants\n").arg(experienceStats["2 ans"]);
+        response += QString("- 3 ans: %1 consultants\n").arg(experienceStats["3 ans"]);
+        response += QString("- 4 ans: %1 consultants\n").arg(experienceStats["4 ans"]);
+        response += QString("- 5 ans: %1 consultants").arg(experienceStats["5 ans"]);
+    }
+    else if(lowerMsg == "donner moi tous les taches disponible") {
+        int totalTasks = getTotalTasks();
+        response = QString("🤖 Nombre total des tâches dans la liste: %1").arg(totalTasks);
+    }
+    // Existing commands
+    else if(lowerMsg == "help") {
+        response = "🤖 Vous pouvez me demander :\n"
+                   "- Gestion des consultants\n"
+                   "- Suivi des tâches\n"
+                   "- Génération de rapports\n"
+                   "- Informations système\n"
+                   "Commandes d'action:\n"
+                   "- 'export pdf' - Exporter le tableau en PDF\n"
+                   "- 'reset table' - Réinitialiser le tableau\n"
+                   "Commandes de base de données:\n"
+                   "- 'total des consultants' - Nombre total de consultants\n"
+                   "- 'disponibilité des consultants' - Statistiques de disponibilité\n"
+                   "- 'donner moi les expériences existe' - Répartition par expérience\n"
+                   "- 'donner moi tous les taches disponible' - Nombre total de tâches";
     }
     else if(lowerMsg == "about") {
         response = "🤖 Système de Gestion de Consultants v1.0\nDéveloppé avec Qt/C++\n© 2024 STRATEDGE";
@@ -717,7 +842,15 @@ void MainWindow::handleBotResponse(const QString &userMessage)
         response = "🤖 Contactez-nous :\nsupport@STRATEDDGE.com\n+216 70-567-890";
     }
     else if(lowerMsg == "commands") {
-        response = "🤖 Commandes disponibles :\n- help\n- about\n- contact\n- commands\n- clear";
+        response = "🤖 Commandes disponibles :\n"
+                   "- help\n- about\n- contact\n- commands\n- clear\n"
+                   "Commandes d'action:\n"
+                   "- export pdf\n- reset table\n"
+                   "Commandes de base de données:\n"
+                   "- total des consultants\n"
+                   "- disponibilité des consultants\n"
+                   "- donner moi les expériences existe\n"
+                   "- donner moi tous les taches disponible";
     }
     else if(lowerMsg == "clear") {
         chatHistory->clear();
@@ -725,12 +858,25 @@ void MainWindow::handleBotResponse(const QString &userMessage)
         chatHistory->addItem(welcomeItem);
         return;
     }
+    else {
+        response = "🤖 Je ne comprends pas cette commande. Tapez 'help' pour voir les commandes disponibles.";
+    }
 
     QListWidgetItem *botItem = new QListWidgetItem(response);
     botItem->setForeground(QColor("#4D6F50"));
     chatHistory->addItem(botItem);
     chatHistory->scrollToBottom();
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

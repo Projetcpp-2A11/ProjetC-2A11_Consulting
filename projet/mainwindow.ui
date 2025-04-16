@@ -73,7 +73,7 @@ QTabBar::tab:hover {
 </string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_2">
        <attribute name="title">
@@ -95,8 +95,8 @@ border-radius:9px;</string>
         <widget class="QLabel" name="label_18">
          <property name="geometry">
           <rect>
-           <x>21</x>
-           <y>171</y>
+           <x>30</x>
+           <y>180</y>
            <width>79</width>
            <height>20</height>
           </rect>
@@ -151,8 +151,8 @@ QLineEdit:focus {
         <widget class="QLabel" name="label_17">
          <property name="geometry">
           <rect>
-           <x>21</x>
-           <y>121</y>
+           <x>30</x>
+           <y>130</y>
            <width>69</width>
            <height>20</height>
           </rect>
@@ -173,8 +173,8 @@ QLineEdit:focus {
         <widget class="QLabel" name="label_16">
          <property name="geometry">
           <rect>
-           <x>21</x>
-           <y>71</y>
+           <x>30</x>
+           <y>80</y>
            <width>121</width>
            <height>20</height>
           </rect>
@@ -195,8 +195,8 @@ QLineEdit:focus {
         <widget class="QLabel" name="label_15">
          <property name="geometry">
           <rect>
-           <x>21</x>
-           <y>21</y>
+           <x>30</x>
+           <y>30</y>
            <width>154</width>
            <height>20</height>
           </rect>
@@ -936,20 +936,24 @@ QComboBox::down-arrow {
         <widget class="QLabel" name="label_35">
          <property name="geometry">
           <rect>
-           <x>130</x>
-           <y>570</y>
-           <width>151</width>
-           <height>21</height>
+           <x>160</x>
+           <y>540</y>
+           <width>221</width>
+           <height>51</height>
           </rect>
          </property>
          <property name="font">
           <font>
            <family>Sitka</family>
            <pointsize>14</pointsize>
+           <italic>false</italic>
+           <bold>false</bold>
           </font>
          </property>
          <property name="styleSheet">
-          <string notr="true">color: rgb(0, 0, 0);</string>
+          <string notr="true">color: rgb(0, 0, 0);
+
+font: 14pt ;</string>
          </property>
          <property name="text">
           <string>Choisir L'ID :</string>
@@ -958,9 +962,9 @@ QComboBox::down-arrow {
         <widget class="QPushButton" name="supp">
          <property name="geometry">
           <rect>
-           <x>350</x>
-           <y>560</y>
-           <width>101</width>
+           <x>590</x>
+           <y>550</y>
+           <width>111</width>
            <height>31</height>
           </rect>
          </property>
@@ -997,7 +1001,7 @@ QPushButton:pressed {
          <property name="geometry">
           <rect>
            <x>810</x>
-           <y>180</y>
+           <y>150</y>
            <width>141</width>
            <height>61</height>
           </rect>
@@ -1042,7 +1046,7 @@ QPushButton:pressed {
          <property name="geometry">
           <rect>
            <x>490</x>
-           <y>60</y>
+           <y>50</y>
            <width>131</width>
            <height>21</height>
           </rect>
@@ -1097,9 +1101,9 @@ QLineEdit:focus {
         <widget class="QLineEdit" name="id_supp">
          <property name="geometry">
           <rect>
-           <x>240</x>
-           <y>560</y>
-           <width>81</width>
+           <x>310</x>
+           <y>550</y>
+           <width>211</width>
            <height>30</height>
           </rect>
          </property>
@@ -1216,6 +1220,51 @@ QPushButton:pressed {
          </property>
          <property name="text">
           <string>Envoyer</string>
+         </property>
+        </widget>
+        <widget class="QPushButton" name="reset_table">
+         <property name="geometry">
+          <rect>
+           <x>810</x>
+           <y>270</y>
+           <width>141</width>
+           <height>61</height>
+          </rect>
+         </property>
+         <property name="font">
+          <font>
+           <family>Sitka</family>
+           <pointsize>-1</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QPushButton {
+    background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1,
+                                stop:0 rgba(193, 179, 255, 200), 
+                                stop:1 rgba(255, 228, 196, 200));
+    color: #4A4A4A;
+    border-radius: 10px;
+    border: 1px solid rgba(74, 74, 74, 50);
+    padding: 8px 15px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+QPushButton:hover {
+    background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1,
+                                stop:0 rgba(170, 153, 255, 200), 
+                                stop:1 rgba(255, 204, 153, 200));
+    color: black;
+}
+
+QPushButton:pressed {
+    background: rgba(193, 179, 255, 180);
+}
+</string>
+         </property>
+         <property name="text">
+          <string>Réinitialiser</string>
          </property>
         </widget>
        </widget>

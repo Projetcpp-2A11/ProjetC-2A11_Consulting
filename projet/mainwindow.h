@@ -68,7 +68,7 @@ public:
     void on_modifications_clicked();
     // valeur orginal pour la modiacation (tracking system)
     QMap<QPair<int, int>, QString> originalValues;
-
+    void on_reset_table_clicked();
     // Add to private members
     QListWidget *chatHistory;
     QLineEdit *messageInput;
@@ -77,6 +77,11 @@ public:
     // Add to private slots
     void onSendMessage();
     void handleBotResponse(const QString &userMessage);
+
+    int getTotalConsultants();
+    QPair<int, int> getAvailabilityStats();
+    QMap<QString, int> getExperienceStats();
+    int getTotalTasks();
 
     //ardunio
     void on_connectButton_clicked();
