@@ -1,0 +1,8 @@
+ID_EMP: 21
+NOM_EMP: firas 
+PRENOM_EMP: firas
+POSTE: Consultant 
+TELEPHONE: 23456789
+DATE_NAISSANCE: Wed May 1 2002
+MDPS: hjvdshjv
+EMAIL: hndnn@gmail.com

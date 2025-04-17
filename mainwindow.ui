@@ -17,8 +17,8 @@
    <widget class="QTabWidget" name="tabWidget">
     <property name="geometry">
      <rect>
-      <x>70</x>
-      <y>30</y>
+      <x>80</x>
+      <y>40</y>
       <width>1131</width>
       <height>601</height>
      </rect>
@@ -57,8 +57,8 @@ QTabBar {
 }
 
 QTabBar::tab {
-    background: #E0E7F0;
-    color: #000;
+    background: white;
+    color: black;
     border: 1px solid #D3D3D3;
     border-radius: 10px;
     padding: 5px 10px;  /* Adjust padding for smaller size */
@@ -77,7 +77,7 @@ QTabBar::tab:selected {
 
 QTabBar::tab:hover {
     background: #A9A9A9;
-    color: white;
+    color: black;
 }
 </string>
     </property>
@@ -125,7 +125,7 @@ QTabBar::tab:hover {
       <property name="geometry">
        <rect>
         <x>740</x>
-        <y>420</y>
+        <y>410</y>
         <width>151</width>
         <height>29</height>
        </rect>
@@ -214,17 +214,30 @@ QTabBar::tab:hover {
      <widget class="QLabel" name="label_3">
       <property name="geometry">
        <rect>
-        <x>0</x>
-        <y>30</y>
-        <width>681</width>
-        <height>531</height>
+        <x>80</x>
+        <y>120</y>
+        <width>531</width>
+        <height>401</height>
        </rect>
       </property>
       <property name="text">
        <string/>
       </property>
       <property name="pixmap">
-       <pixmap resource="ressource.qrc">:/img/476340197_494486546746576_7566987837383606640_n.png</pixmap>
+       <pixmap resource="ressource.qrc">:/img/logo.png</pixmap>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="login_2">
+      <property name="geometry">
+       <rect>
+        <x>740</x>
+        <y>450</y>
+        <width>151</width>
+        <height>29</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Mot de passe oublié</string>
       </property>
      </widget>
     </widget>
@@ -247,8 +260,8 @@ QTabBar::tab:hover {
      <widget class="QTabWidget" name="tabWidget_2">
       <property name="geometry">
        <rect>
-        <x>60</x>
-        <y>10</y>
+        <x>70</x>
+        <y>20</y>
         <width>921</width>
         <height>561</height>
        </rect>
@@ -280,7 +293,7 @@ QTabBar::tab {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="tab_3">
        <attribute name="title">
@@ -290,9 +303,9 @@ QTabBar::tab {
         <property name="geometry">
          <rect>
           <x>50</x>
-          <y>40</y>
+          <y>60</y>
           <width>831</width>
-          <height>421</height>
+          <height>401</height>
          </rect>
         </property>
        </widget>
@@ -320,6 +333,55 @@ QTabBar::tab {
         </property>
         <property name="text">
          <string>modifier</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="modifier_3">
+        <property name="geometry">
+         <rect>
+          <x>60</x>
+          <y>470</y>
+          <width>111</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string> trier par nom</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="modifier_4">
+        <property name="geometry">
+         <rect>
+          <x>180</x>
+          <y>470</y>
+          <width>121</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>trier par prenom</string>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="lineEdit_5">
+        <property name="geometry">
+         <rect>
+          <x>160</x>
+          <y>20</y>
+          <width>251</width>
+          <height>28</height>
+         </rect>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="modifier_5">
+        <property name="geometry">
+         <rect>
+          <x>420</x>
+          <y>20</y>
+          <width>151</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Rechercher</string>
         </property>
        </widget>
       </widget>
@@ -537,8 +599,8 @@ QTabBar::tab {
        <widget class="QPushButton" name="ajouter">
         <property name="geometry">
          <rect>
-          <x>510</x>
-          <y>350</y>
+          <x>690</x>
+          <y>440</y>
           <width>151</width>
           <height>29</height>
          </rect>
@@ -585,6 +647,48 @@ QTabBar::tab {
           <width>110</width>
           <height>29</height>
          </rect>
+        </property>
+       </widget>
+       <widget class="QLabel" name="label_pic">
+        <property name="geometry">
+         <rect>
+          <x>600</x>
+          <y>290</y>
+          <width>171</width>
+          <height>131</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>TextLabel</string>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="pushButton">
+        <property name="geometry">
+         <rect>
+          <x>470</x>
+          <y>330</y>
+          <width>83</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>photo</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="scannerVisageBoutton">
+        <property name="geometry">
+         <rect>
+          <x>512</x>
+          <y>440</y>
+          <width>161</width>
+          <height>29</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Scanner visage</string>
         </property>
        </widget>
       </widget>
