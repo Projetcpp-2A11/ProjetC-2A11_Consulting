@@ -1,4 +1,4 @@
-QT += core gui sql printsupport charts svg serialport
+QT += core gui sql printsupport charts svg serialport network
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 RESOURCES += ressource.qrc
 CONFIG += c++17

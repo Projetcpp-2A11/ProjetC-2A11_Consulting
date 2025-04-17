@@ -1,19 +1,10 @@
+#include "consult.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "todo.h"
-#include <QSerialPort>
 #include "connection.h"
-#include "consult.h"
-#include <QSqlQuery>
-#include <QDebug>
-#include <QTextDocument>
-#include <QDir>
-#include <QFileDialog>
-#include <QPrinter>
-#include <QPrintDialog>
-#include <QPageSize>
-#include <QMarginsF>
-#include <QTimer>
+
+
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -24,6 +15,7 @@ MainWindow::MainWindow(QWidget *parent)
     initializeChatBot();
     QTimer::singleShot(1000, this, &MainWindow::checkArduinoConnection);
     // Connection des signals avec les slots
+    networkManager = new QNetworkAccessManager(this);
     connect(ui->ajouter, &QPushButton::clicked, this, &MainWindow::on_ajouter_clicked);
     connect(ui->supp, &QPushButton::clicked, this, &MainWindow::on_supp_clicked);
     connect(ui->mod, &QPushButton::clicked, this, &MainWindow::on_modifications_clicked);
@@ -374,6 +366,36 @@ void MainWindow::on_reset_table_clicked()
 }
 
 
+QMap<QString, QString> MainWindow::getFirstConsultant() {
+    QSqlQuery query;
+    QMap<QString, QString> consultant;
+
+    query.exec("SELECT NOM_CON, PRENOM_CON, DISPONIBILITE FROM CONSULTANT ORDER BY ID_CON ASC LIMIT 1");
+    if (query.next()) {
+        consultant["nom"] = query.value(0).toString();
+        consultant["prenom"] = query.value(1).toString();
+        consultant["disponibilite"] = query.value(2).toString();
+    }
+
+    return consultant;
+}
+
+QMap<QString, QString> MainWindow::getLastConsultant() {
+    QSqlQuery query;
+    QMap<QString, QString> consultant;
+
+    query.exec("SELECT NOM_CON, PRENOM_CON, DISPONIBILITE FROM CONSULTANT ORDER BY ID_CON DESC LIMIT 1");
+    if (query.next()) {
+        consultant["nom"] = query.value(0).toString();
+        consultant["prenom"] = query.value(1).toString();
+        consultant["disponibilite"] = query.value(2).toString();
+    }
+
+    return consultant;
+}
+
+
+
 void MainWindow::on_search_s_clicked()
 {
     QString searchTerm = ui->search->text().trimmed();
@@ -597,7 +619,97 @@ int MainWindow::getTotalTasks() {
 }
 
 
+///////     chatbot
 
+/*
+void MainWindow::onSendMessage()
+{
+    QString message = messageInput->text().trimmed();
+    if(message.isEmpty()) return;
+
+    // Add user message
+    QListWidgetItem *userItem = new QListWidgetItem("👤 " + message);
+    userItem->setTextAlignment(Qt::AlignRight);
+    userItem->setForeground(QColor("#2c3e50"));
+    chatHistory->addItem(userItem);
+
+    // Clear input
+    messageInput->clear();
+
+    // Simulate bot response
+    QTimer::singleShot(500, this, [this, message]() {
+        handleBotResponse(message);
+    });
+}
+
+*/
+
+
+
+void MainWindow::onSendMessage()
+{
+    QString question = messageInput->text().trimmed();
+
+    if (question.isEmpty()) return;
+
+    // Add user message to chat
+    QListWidgetItem *userItem = new QListWidgetItem("👤 " + question);
+    userItem->setTextAlignment(Qt::AlignRight);
+    userItem->setForeground(QColor("#2c3e50"));
+    chatHistory->addItem(userItem);
+
+    // Clear input
+    messageInput->clear();
+
+    // Prepare the API request
+    QUrl url("http://localhost:11434/api/generate");
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QJsonObject payload;
+    payload["model"] = "deepseek-r1:1.5b";
+    payload["prompt"] = question + " (Réponds en français)";
+    payload["stream"] = false;
+
+    QJsonDocument doc(payload);
+    QNetworkReply* reply = networkManager->post(request, doc.toJson());
+
+    // Connect the finished signal to handle the response
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        this->handleBotResponse(reply);
+        reply->deleteLater();
+    });
+}
+
+
+
+
+
+void MainWindow::handleBotResponse(QNetworkReply* reply)
+{
+    if (reply->error() == QNetworkReply::NoError) {
+        QByteArray responseData = reply->readAll();
+        QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
+        QJsonObject jsonObject = jsonResponse.object();
+
+        QString answer = jsonObject["response"].toString();
+
+        // Add bot response to chat
+        QListWidgetItem *botItem = new QListWidgetItem("🤖 " + answer);
+        botItem->setTextAlignment(Qt::AlignLeft);
+        botItem->setForeground(QColor("#4D6F50"));
+        chatHistory->addItem(botItem);
+
+        // Scroll to the bottom of the chat
+        chatHistory->scrollToBottom();
+    } else {
+        QString errorMsg = "Erreur: " + reply->errorString();
+        QListWidgetItem *errorItem = new QListWidgetItem("⚠ " + errorMsg);
+        errorItem->setTextAlignment(Qt::AlignLeft);
+        errorItem->setForeground(Qt::red);
+        chatHistory->addItem(errorItem);
+    }
+}
 
 
 
@@ -667,6 +779,8 @@ void MainWindow::on_supprimerTache_clicked() {
 void MainWindow::on_rafraichirListe_clicked() {
     chargerListeTaches();
 }
+
+
 void MainWindow::initializeChatBot()
 {
     QWidget *chatWidget = ui->tab_5;
@@ -747,126 +861,9 @@ void MainWindow::initializeChatBot()
     connect(messageInput, &QLineEdit::returnPressed, this, &MainWindow::onSendMessage);
 }
 
-void MainWindow::onSendMessage()
-{
-    QString message = messageInput->text().trimmed();
-    if(message.isEmpty()) return;
-
-    // Add user message
-    QListWidgetItem *userItem = new QListWidgetItem("👤 " + message);
-    userItem->setTextAlignment(Qt::AlignRight);
-    userItem->setForeground(QColor("#2c3e50"));
-    chatHistory->addItem(userItem);
-
-    // Clear input
-    messageInput->clear();
-
-    // Simulate bot response
-    QTimer::singleShot(500, this, [this, message]() {
-        handleBotResponse(message);
-    });
-}
 
 
 
-void MainWindow::handleBotResponse(const QString &userMessage)
-{
-    QString lowerMsg = userMessage.toLower();
-    QString response;
-
-    // Action commands
-    if(lowerMsg == "export pdf") {
-        on_pdf_clicked();
-        response = "🤖 J'ai exporté le tableau en PDF avec succès!";
-    }
-    else if(lowerMsg == "reset table") {
-        on_reset_table_clicked();
-        response = "🤖 Le tableau a été réinitialisé à son ordre original!";
-    }
-    // New database interaction commands
-    else if(lowerMsg == "total des consultants") {
-        int total = getTotalConsultants();
-        response = QString("🤖 Nombre total des consultants est %1").arg(total);
-    }
-    else if(lowerMsg == "disponibilité des consultants") {
-        QPair<int, int> availability = getAvailabilityStats();
-        int ouiCount = availability.first;
-        int nonCount = availability.second;
-
-        response = QString("🤖 Ici, les consultants qui sont disponible: %1\n"
-                           "Et les consultants qui ne sont pas disponible: %2\n")
-                       .arg(ouiCount).arg(nonCount);
-
-        if (ouiCount > nonCount) {
-            response += "Les consultants disponibles sont les plus dominants.";
-        } else if (nonCount > ouiCount) {
-            response += "Les consultants non disponibles sont les plus dominants.";
-        } else {
-            response += "Il y a égalité entre consultants disponibles et non disponibles.";
-        }
-    }
-    else if(lowerMsg == "donner moi les expériences existe") {
-        QMap<QString, int> experienceStats = getExperienceStats();
-
-        response = "🤖 Répartition par expérience:\n";
-        response += QString("- 1 an: %1 consultants\n").arg(experienceStats["1 an"]);
-        response += QString("- 2 ans: %1 consultants\n").arg(experienceStats["2 ans"]);
-        response += QString("- 3 ans: %1 consultants\n").arg(experienceStats["3 ans"]);
-        response += QString("- 4 ans: %1 consultants\n").arg(experienceStats["4 ans"]);
-        response += QString("- 5 ans: %1 consultants").arg(experienceStats["5 ans"]);
-    }
-    else if(lowerMsg == "donner moi tous les taches disponible") {
-        int totalTasks = getTotalTasks();
-        response = QString("🤖 Nombre total des tâches dans la liste: %1").arg(totalTasks);
-    }
-    // Existing commands
-    else if(lowerMsg == "help") {
-        response = "🤖 Vous pouvez me demander :\n"
-                   "- Gestion des consultants\n"
-                   "- Suivi des tâches\n"
-                   "- Génération de rapports\n"
-                   "- Informations système\n"
-                   "Commandes d'action:\n"
-                   "- 'export pdf' - Exporter le tableau en PDF\n"
-                   "- 'reset table' - Réinitialiser le tableau\n"
-                   "Commandes de base de données:\n"
-                   "- 'total des consultants' - Nombre total de consultants\n"
-                   "- 'disponibilité des consultants' - Statistiques de disponibilité\n"
-                   "- 'donner moi les expériences existe' - Répartition par expérience\n"
-                   "- 'donner moi tous les taches disponible' - Nombre total de tâches";
-    }
-    else if(lowerMsg == "about") {
-        response = "🤖 Système de Gestion de Consultants v1.0\nDéveloppé avec Qt/C++\n© 2024 STRATEDGE";
-    }
-    else if(lowerMsg == "contact") {
-        response = "🤖 Contactez-nous :\nsupport@STRATEDDGE.com\n+216 70-567-890";
-    }
-    else if(lowerMsg == "commands") {
-        response = "🤖 Commandes disponibles :\n"
-                   "- help\n- about\n- contact\n- commands\n- clear\n"
-                   "Commandes d'action:\n"
-                   "- export pdf\n- reset table\n"
-                   "Commandes de base de données:\n"
-                   "- total des consultants\n"
-                   "- disponibilité des consultants\n"
-                   "- donner moi les expériences existe\n"
-                   "- donner moi tous les taches disponible";
-    }
-    else if(lowerMsg == "clear") {
-        chatHistory->clear();
-        QListWidgetItem *welcomeItem = new QListWidgetItem("🤖 Historique effacé !");
-        chatHistory->addItem(welcomeItem);
-        return;
-    }
-    else {
-        response = "🤖 Je ne comprends pas cette commande. Tapez 'help' pour voir les commandes disponibles.";
-    }
-
-    QListWidgetItem *botItem = new QListWidgetItem(response);
-    botItem->setForeground(QColor("#4D6F50"));
-    chatHistory->addItem(botItem);
-    chatHistory->scrollToBottom();
-}
 
 
 
@@ -904,9 +901,9 @@ void MainWindow::showConnectionStatus(bool connected)
 void MainWindow::checkArduinoConnection()
 {
     if(arduino_is_available && arduino->isOpen()) {
-        arduino->write("C"); // Send test command
+        arduino->write("C");
 
-        if(arduino->waitForReadyRead(1000)) { // Wait 1 second for response
+        if(arduino->waitForReadyRead(1000)) {
             QByteArray response = arduino->readAll();
             while(arduino->waitForReadyRead(10)) {
                 response += arduino->readAll();

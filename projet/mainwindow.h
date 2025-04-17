@@ -25,6 +25,21 @@
 #include <QLineEdit>
 #include <QPushButton>
 #include <QSerialPort>
+#include <QNetworkAccessManager>
+#include <QNetworkReply>
+#include <QJsonDocument>
+#include <QJsonObject>
+#include <QSerialPort>
+#include <QSqlQuery>
+#include <QDebug>
+#include <QTextDocument>
+#include <QDir>
+#include <QFileDialog>
+#include <QPrinter>
+#include <QPrintDialog>
+#include <QPageSize>
+#include <QMarginsF>
+#include <QTimer>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -76,8 +91,9 @@ public:
     void initializeChatBot();
     // Add to private slots
     void onSendMessage();
-    void handleBotResponse(const QString &userMessage);
-
+    void handleBotResponse(QNetworkReply* reply);
+    QMap<QString, QString> getFirstConsultant();
+    QMap<QString, QString> getLastConsultant();
     int getTotalConsultants();
     QPair<int, int> getAvailabilityStats();
     QMap<QString, int> getExperienceStats();
@@ -90,7 +106,7 @@ public:
     QSerialPort *arduino;
     bool arduino_is_available;
     void showConnectionStatus(bool connected);
-
+    QNetworkAccessManager* networkManager;
 
 private slots:
     void on_ajouter_clicked();
