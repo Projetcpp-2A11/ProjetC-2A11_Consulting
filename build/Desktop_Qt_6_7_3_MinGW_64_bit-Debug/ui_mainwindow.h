@@ -38,12 +38,18 @@ public:
     QLabel *label;
     QLabel *label_2;
     QLabel *label_3;
+    QPushButton *login_2;
     QWidget *tab_2;
     QTabWidget *tabWidget_2;
     QWidget *tab_3;
     QTableView *tab_emp;
     QPushButton *Supprimer_emp;
     QPushButton *modifier_2;
+    QPushButton *modifier_3;
+    QPushButton *modifier_4;
+    QLineEdit *lineEdit_5;
+    QPushButton *modifier_5;
+    QPushButton *modifier_6;
     QWidget *tab;
     QLabel *label_4;
     QLabel *label_5;
@@ -60,6 +66,7 @@ public:
     QPushButton *ajouter;
     QComboBox *comboBox;
     QDateEdit *dateEdit;
+    QComboBox *comboBox_3;
     QWidget *tab_4;
     QLabel *label_11;
     QLabel *label_12;
@@ -93,7 +100,7 @@ public:
         centralwidget->setObjectName("centralwidget");
         tabWidget = new QTabWidget(centralwidget);
         tabWidget->setObjectName("tabWidget");
-        tabWidget->setGeometry(QRect(70, 30, 1131, 601));
+        tabWidget->setGeometry(QRect(80, 40, 1131, 601));
         QSizePolicy sizePolicy(QSizePolicy::Policy::Fixed, QSizePolicy::Policy::Expanding);
         sizePolicy.setHorizontalStretch(0);
         sizePolicy.setVerticalStretch(0);
@@ -114,8 +121,8 @@ public:
 "}\n"
 "\n"
 "QTabBar::tab {\n"
-"    background: #E0E7F0;\n"
-"    color: #000;\n"
+"    background: white;\n"
+"    color: black;\n"
 "    border: 1px solid #D3D3D3;\n"
 "    border-radius: 10px;\n"
 "    padding: 5px 10px;  /* Adjust padding for smaller size */\n"
@@ -134,7 +141,7 @@ public:
 "\n"
 "QTabBar::tab:hover {\n"
 "    background: #A9A9A9;\n"
-"    color: white;\n"
+"    color: black;\n"
 "}\n"
 ""));
         tabWidget->setTabPosition(QTabWidget::TabPosition::West);
@@ -153,7 +160,7 @@ public:
         acceuil->setMinimumSize(QSize(80, 35));
         login = new QPushButton(acceuil);
         login->setObjectName("login");
-        login->setGeometry(QRect(740, 420, 151, 29));
+        login->setGeometry(QRect(740, 410, 151, 29));
         lineEdit = new QLineEdit(acceuil);
         lineEdit->setObjectName("lineEdit");
         lineEdit->setGeometry(QRect(720, 290, 201, 28));
@@ -175,8 +182,11 @@ public:
         label_2->setStyleSheet(QString::fromUtf8("color: #000000; "));
         label_3 = new QLabel(acceuil);
         label_3->setObjectName("label_3");
-        label_3->setGeometry(QRect(0, 30, 681, 531));
-        label_3->setPixmap(QPixmap(QString::fromUtf8(":/img/476340197_494486546746576_7566987837383606640_n.png")));
+        label_3->setGeometry(QRect(80, 120, 531, 401));
+        label_3->setPixmap(QPixmap(QString::fromUtf8(":/img/logo.png")));
+        login_2 = new QPushButton(acceuil);
+        login_2->setObjectName("login_2");
+        login_2->setGeometry(QRect(740, 450, 151, 29));
         tabWidget->addTab(acceuil, QString());
         tab_2 = new QWidget();
         tab_2->setObjectName("tab_2");
@@ -214,13 +224,28 @@ public:
         tab_3->setObjectName("tab_3");
         tab_emp = new QTableView(tab_3);
         tab_emp->setObjectName("tab_emp");
-        tab_emp->setGeometry(QRect(50, 40, 831, 421));
+        tab_emp->setGeometry(QRect(50, 60, 831, 401));
         Supprimer_emp = new QPushButton(tab_3);
         Supprimer_emp->setObjectName("Supprimer_emp");
         Supprimer_emp->setGeometry(QRect(742, 470, 131, 29));
         modifier_2 = new QPushButton(tab_3);
         modifier_2->setObjectName("modifier_2");
         modifier_2->setGeometry(QRect(570, 470, 151, 29));
+        modifier_3 = new QPushButton(tab_3);
+        modifier_3->setObjectName("modifier_3");
+        modifier_3->setGeometry(QRect(60, 470, 111, 29));
+        modifier_4 = new QPushButton(tab_3);
+        modifier_4->setObjectName("modifier_4");
+        modifier_4->setGeometry(QRect(180, 470, 121, 29));
+        lineEdit_5 = new QLineEdit(tab_3);
+        lineEdit_5->setObjectName("lineEdit_5");
+        lineEdit_5->setGeometry(QRect(160, 20, 251, 28));
+        modifier_5 = new QPushButton(tab_3);
+        modifier_5->setObjectName("modifier_5");
+        modifier_5->setGeometry(QRect(420, 20, 151, 29));
+        modifier_6 = new QPushButton(tab_3);
+        modifier_6->setObjectName("modifier_6");
+        modifier_6->setGeometry(QRect(370, 470, 151, 29));
         tabWidget_2->addTab(tab_3, QString());
         tab = new QWidget();
         tab->setObjectName("tab");
@@ -293,6 +318,9 @@ public:
         dateEdit = new QDateEdit(tab);
         dateEdit->setObjectName("dateEdit");
         dateEdit->setGeometry(QRect(220, 250, 110, 29));
+        comboBox_3 = new QComboBox(tab);
+        comboBox_3->setObjectName("comboBox_3");
+        comboBox_3->setGeometry(QRect(130, 440, 82, 28));
         tabWidget_2->addTab(tab, QString());
         tab_4 = new QWidget();
         tab_4->setObjectName("tab_4");
@@ -402,8 +430,8 @@ public:
 
         retranslateUi(MainWindow);
 
-        tabWidget->setCurrentIndex(1);
-        tabWidget_2->setCurrentIndex(0);
+        tabWidget->setCurrentIndex(0);
+        tabWidget_2->setCurrentIndex(1);
 
 
         QMetaObject::connectSlotsByName(MainWindow);
@@ -420,9 +448,14 @@ public:
         label->setText(QCoreApplication::translate("MainWindow", "Email", nullptr));
         label_2->setText(QCoreApplication::translate("MainWindow", "Mot de passe", nullptr));
         label_3->setText(QString());
+        login_2->setText(QCoreApplication::translate("MainWindow", "Mot de passe oubli\303\251", nullptr));
         tabWidget->setTabText(tabWidget->indexOf(acceuil), QCoreApplication::translate("MainWindow", "Acceuil", nullptr));
         Supprimer_emp->setText(QCoreApplication::translate("MainWindow", "Supprimer", nullptr));
         modifier_2->setText(QCoreApplication::translate("MainWindow", "modifier", nullptr));
+        modifier_3->setText(QCoreApplication::translate("MainWindow", " trier par nom", nullptr));
+        modifier_4->setText(QCoreApplication::translate("MainWindow", "trier par prenom", nullptr));
+        modifier_5->setText(QCoreApplication::translate("MainWindow", "Rechercher", nullptr));
+        modifier_6->setText(QCoreApplication::translate("MainWindow", "Exporter", nullptr));
         tabWidget_2->setTabText(tabWidget_2->indexOf(tab_3), QCoreApplication::translate("MainWindow", "Afficher", nullptr));
         label_4->setText(QCoreApplication::translate("MainWindow", "Nom", nullptr));
         label_5->setText(QCoreApplication::translate("MainWindow", "Date de naissance", nullptr));
