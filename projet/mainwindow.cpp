@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     initialiserOngletToDo();
     initializeChatBot();
     QTimer::singleShot(1000, this, &MainWindow::checkArduinoConnection);
-    // Connection des signals avec les slots
+
     networkManager = new QNetworkAccessManager(this);
     connect(ui->ajouter, &QPushButton::clicked, this, &MainWindow::on_ajouter_clicked);
     connect(ui->supp, &QPushButton::clicked, this, &MainWindow::on_supp_clicked);
@@ -31,11 +31,8 @@ MainWindow::MainWindow(QWidget *parent)
     arduino_is_available = false;
 
     foreach(const QSerialPortInfo &serialPortInfo, QSerialPortInfo::availablePorts()) {
-        // Check if the serial port has both a vendor and product ID
+
         if(serialPortInfo.hasVendorIdentifier() && serialPortInfo.hasProductIdentifier()) {
-            // Here you should check against your specific Arduino's vendor and product IDs
-            // For example, for an Arduino Uno:
-            // if(serialPortInfo.vendorIdentifier() == 0x2341 && serialPortInfo.productIdentifier() == 0x0043)
             arduino_is_available = true;
             arduino->setPortName(serialPortInfo.portName());
         }
@@ -305,11 +302,10 @@ void MainWindow::on_modifications_clicked()
 
 void MainWindow::on_pdf_clicked()
 {
-    // Fetch data
+
     QSqlQuery query;
     QList<Consultant> consultants = Consultant::fetchAllConsultants(query);
 
-    // Create HTML content
     QString html;
     html += "<h1 style='text-align:center'>Liste de tous les Consultants :</h1>";
     html += "<table border='1' style='width:100%; border-collapse:collapse'>"
@@ -334,11 +330,10 @@ void MainWindow::on_pdf_clicked()
     }
     html += "</table>";
 
-    // creation d' un Doc
     QTextDocument document;
     document.setHtml(html);
 
-    // Verifer le directoire existe
+
     QDir().mkpath("Documents_consultant");
     QPrinter printer(QPrinter::HighResolution);
     printer.setOutputFormat(QPrinter::PdfFormat);
@@ -405,7 +400,7 @@ void MainWindow::on_search_s_clicked()
         return;
     }
 
-    // Clear the table
+
     ui->tableau->setRowCount(0);
     originalValues.clear();
 
@@ -479,17 +474,20 @@ void MainWindow::on_reset_clicked()
 }
 
 
+
+//debut to do list
+
+
 void MainWindow::initialiserOngletToDo() {
     QWidget *widgetToDo = ui->tab_4;
     QVBoxLayout *layoutPrincipal = new QVBoxLayout(widgetToDo);
 
-    // Title
+
     QLabel *titre = new QLabel("Liste des Tâches à Faire");
     titre->setStyleSheet("QLabel { color: #4D6F50; font-size: 20px; font-weight: bold; }");
     titre->setAlignment(Qt::AlignCenter);
     layoutPrincipal->addWidget(titre);
 
-    // Input area
     QWidget *zoneSaisie = new QWidget();
     QHBoxLayout *layoutSaisie = new QHBoxLayout(zoneSaisie);
 
@@ -512,7 +510,7 @@ void MainWindow::initialiserOngletToDo() {
     layoutSaisie->setStretch(1, 2);
     layoutSaisie->setStretch(3, 3);
 
-    // Buttons area
+
     QWidget *zoneBoutons = new QWidget();
     QHBoxLayout *layoutBoutons = new QHBoxLayout(zoneBoutons);
 
@@ -520,7 +518,7 @@ void MainWindow::initialiserOngletToDo() {
     boutonSupprimer = new QPushButton("Supprimer Tâche");
     boutonRafraichir = new QPushButton("Rafraîchir Liste");
 
-    // Style buttons to match your existing design
+
     QString styleBouton = "QPushButton {"
                           "background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1,"
                           "stop:0 rgba(193, 179, 255, 200), stop:1 rgba(255, 228, 196, 200));"
@@ -540,180 +538,23 @@ void MainWindow::initialiserOngletToDo() {
     layoutBoutons->addWidget(boutonSupprimer);
     layoutBoutons->addWidget(boutonRafraichir);
 
-    // Task list
+
     listeTaches = new QListWidget();
     listeTaches->setStyleSheet("QListWidget { border: 2px solid #4D6F50; border-radius: 5px; }"
                                "QListWidget::item { padding: 5px; border-bottom: 1px solid #E0E0E0; }"
                                "QListWidget::item:hover { background-color: #E8F5E9; }");
 
-    // Add widgets to main layout
+
     layoutPrincipal->addWidget(zoneSaisie);
     layoutPrincipal->addWidget(zoneBoutons);
     layoutPrincipal->addWidget(listeTaches);
 
-    // Connect signals
     connect(boutonAjouter, &QPushButton::clicked, this, &MainWindow::on_ajouterTache_clicked);
     connect(boutonSupprimer, &QPushButton::clicked, this, &MainWindow::on_supprimerTache_clicked);
     connect(boutonRafraichir, &QPushButton::clicked, this, &MainWindow::on_rafraichirListe_clicked);
 
-    // Load initial tasks
     chargerListeTaches();
 }
-
-
-
-
-
-int MainWindow::getTotalConsultants() {
-    QSqlQuery query;
-    query.exec("SELECT COUNT(*) FROM CONSULTANT");
-    if (query.next()) {
-        return query.value(0).toInt();
-    }
-    return 0;
-}
-
-QPair<int, int> MainWindow::getAvailabilityStats() {
-    QSqlQuery query;
-    int ouiCount = 0, nonCount = 0;
-
-    query.exec("SELECT DISPONIBILITE, COUNT(*) FROM CONSULTANT GROUP BY DISPONIBILITE");
-    while (query.next()) {
-        if (query.value(0).toString() == "Oui") {
-            ouiCount = query.value(1).toInt();
-        } else {
-            nonCount = query.value(1).toInt();
-        }
-    }
-
-    return qMakePair(ouiCount, nonCount);
-}
-
-QMap<QString, int> MainWindow::getExperienceStats() {
-    QSqlQuery query;
-    QMap<QString, int> experienceMap;
-
-    // Initialize all possible experience levels
-    QStringList experiences = {"1 an", "2 ans", "3 ans", "4 ans", "5 ans"};
-    for (const QString &exp : experiences) {
-        experienceMap[exp] = 0;
-    }
-
-    query.exec("SELECT EXPERIENCE, COUNT(*) FROM CONSULTANT GROUP BY EXPERIENCE");
-    while (query.next()) {
-        QString exp = query.value(0).toString();
-        int count = query.value(1).toInt();
-        experienceMap[exp] = count;
-    }
-
-    return experienceMap;
-}
-
-int MainWindow::getTotalTasks() {
-    QSqlQuery query;
-    query.exec("SELECT COUNT(*) FROM TODO");
-    if (query.next()) {
-        return query.value(0).toInt();
-    }
-    return 0;
-}
-
-
-///////     chatbot
-
-/*
-void MainWindow::onSendMessage()
-{
-    QString message = messageInput->text().trimmed();
-    if(message.isEmpty()) return;
-
-    // Add user message
-    QListWidgetItem *userItem = new QListWidgetItem("👤 " + message);
-    userItem->setTextAlignment(Qt::AlignRight);
-    userItem->setForeground(QColor("#2c3e50"));
-    chatHistory->addItem(userItem);
-
-    // Clear input
-    messageInput->clear();
-
-    // Simulate bot response
-    QTimer::singleShot(500, this, [this, message]() {
-        handleBotResponse(message);
-    });
-}
-
-*/
-
-
-
-void MainWindow::onSendMessage()
-{
-    QString question = messageInput->text().trimmed();
-
-    if (question.isEmpty()) return;
-
-    // Add user message to chat
-    QListWidgetItem *userItem = new QListWidgetItem("👤 " + question);
-    userItem->setTextAlignment(Qt::AlignRight);
-    userItem->setForeground(QColor("#2c3e50"));
-    chatHistory->addItem(userItem);
-
-    // Clear input
-    messageInput->clear();
-
-    // Prepare the API request
-    QUrl url("http://localhost:11434/api/generate");
-    QNetworkRequest request(url);
-    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
-
-    QJsonObject payload;
-    payload["model"] = "deepseek-r1:1.5b";
-    payload["prompt"] = question + " (Réponds en français)";
-    payload["stream"] = false;
-
-    QJsonDocument doc(payload);
-    QNetworkReply* reply = networkManager->post(request, doc.toJson());
-
-    // Connect the finished signal to handle the response
-    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
-        this->handleBotResponse(reply);
-        reply->deleteLater();
-    });
-}
-
-
-
-
-
-void MainWindow::handleBotResponse(QNetworkReply* reply)
-{
-    if (reply->error() == QNetworkReply::NoError) {
-        QByteArray responseData = reply->readAll();
-        QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
-        QJsonObject jsonObject = jsonResponse.object();
-
-        QString answer = jsonObject["response"].toString();
-
-        // Add bot response to chat
-        QListWidgetItem *botItem = new QListWidgetItem("🤖 " + answer);
-        botItem->setTextAlignment(Qt::AlignLeft);
-        botItem->setForeground(QColor("#4D6F50"));
-        chatHistory->addItem(botItem);
-
-        // Scroll to the bottom of the chat
-        chatHistory->scrollToBottom();
-    } else {
-        QString errorMsg = "Erreur: " + reply->errorString();
-        QListWidgetItem *errorItem = new QListWidgetItem("⚠ " + errorMsg);
-        errorItem->setTextAlignment(Qt::AlignLeft);
-        errorItem->setForeground(Qt::red);
-        chatHistory->addItem(errorItem);
-    }
-}
-
-
-
-
 void MainWindow::chargerListeTaches() {
     listeTaches->clear();
 
@@ -726,6 +567,9 @@ void MainWindow::chargerListeTaches() {
         item->setData(Qt::UserRole, QVariant::fromValue(tache));
     }
 }
+
+//fin to do list
+
 
 void MainWindow::on_ajouterTache_clicked() {
     QString tache = inputTache->text().trimmed();
@@ -780,6 +624,10 @@ void MainWindow::on_rafraichirListe_clicked() {
     chargerListeTaches();
 }
 
+
+
+
+//debut chatbot
 
 void MainWindow::initializeChatBot()
 {
@@ -848,7 +696,7 @@ void MainWindow::initializeChatBot()
     inputLayout->setStretch(0, 5);
     inputLayout->setStretch(1, 1);
 
-    // Add welcome message
+
     QListWidgetItem *welcomeItem = new QListWidgetItem("🤖 Bienvenue dans le ConsultantBot! comment je peux aider ?");
     welcomeItem->setTextAlignment(Qt::AlignLeft);
     chatHistory->addItem(welcomeItem);
@@ -856,9 +704,38 @@ void MainWindow::initializeChatBot()
     mainLayout->addWidget(chatHistory);
     mainLayout->addWidget(inputWidget);
 
-    // Connect signals
+
     connect(sendButton, &QPushButton::clicked, this, &MainWindow::onSendMessage);
     connect(messageInput, &QLineEdit::returnPressed, this, &MainWindow::onSendMessage);
+}
+
+
+
+
+void MainWindow::handleBotResponse(QNetworkReply* reply)
+{
+    if (reply->error() == QNetworkReply::NoError) {
+        QByteArray responseData = reply->readAll();
+        QJsonDocument jsonResponse = QJsonDocument::fromJson(responseData);
+        QJsonObject jsonObject = jsonResponse.object();
+
+        QString answer = jsonObject["response"].toString();
+
+
+        QListWidgetItem *botItem = new QListWidgetItem("🤖 " + answer);
+        botItem->setTextAlignment(Qt::AlignLeft);
+        botItem->setForeground(QColor("#4D6F50"));
+        chatHistory->addItem(botItem);
+
+
+        chatHistory->scrollToBottom();
+    } else {
+        QString errorMsg = "Erreur: " + reply->errorString();
+        QListWidgetItem *errorItem = new QListWidgetItem("⚠ " + errorMsg);
+        errorItem->setTextAlignment(Qt::AlignLeft);
+        errorItem->setForeground(Qt::red);
+        chatHistory->addItem(errorItem);
+    }
 }
 
 
@@ -867,6 +744,41 @@ void MainWindow::initializeChatBot()
 
 
 
+
+void MainWindow::onSendMessage()
+{
+    QString question = messageInput->text().trimmed();
+
+    if (question.isEmpty()) return;
+
+
+    QListWidgetItem *userItem = new QListWidgetItem("👤 " + question);
+    userItem->setTextAlignment(Qt::AlignRight);
+    userItem->setForeground(QColor("#2c3e50"));
+    chatHistory->addItem(userItem);
+
+
+    messageInput->clear();
+
+
+    QUrl url("http://localhost:11434/api/generate");
+    QNetworkRequest request(url);
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+
+    QJsonObject payload;
+    payload["model"] = "deepseek-r1:1.5b";
+    payload["prompt"] = question + " (Réponds en français)";
+    payload["stream"] = false;
+
+    QJsonDocument doc(payload);
+    QNetworkReply* reply = networkManager->post(request, doc.toJson());
+
+
+    connect(reply, &QNetworkReply::finished, this, [this, reply]() {
+        this->handleBotResponse(reply);
+        reply->deleteLater();
+    });
+}
 
 
 
@@ -880,12 +792,20 @@ void MainWindow::initializeChatBot()
             // arduinoooo
 
 
+
+
+
+
+
+
+
+//arduino
+
+
 void MainWindow::on_connectButton_clicked()
 {
     checkArduinoConnection();
 }
-
-
 
 void MainWindow::showConnectionStatus(bool connected)
 {
@@ -893,8 +813,7 @@ void MainWindow::showConnectionStatus(bool connected)
         QMessageBox::information(this, "Connection Status",
                                  "Arduino is connected and responding!");
     } else {
-        QMessageBox::critical(this, "Connection Status",
-                              "Arduino is not connected or not responding!");
+    //    QMessageBox::critical(this, "Connection Status","Arduino is not connected or not responding!");
     }
 }
 

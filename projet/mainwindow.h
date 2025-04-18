@@ -55,7 +55,7 @@ public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
 
-    // Les charts poura la statisticques
+
     QChartView *expChartView;
     QChartView *dispChartView;
 
@@ -63,11 +63,7 @@ public:
     void on_supprimerTache_clicked();
     void on_rafraichirListe_clicked();
     void chargerListeTaches();
-
-    // Add initialiserOngletToDo to the declaration
     void initialiserOngletToDo();
-
-    // Add this to private members
     QListWidget *listeTaches;
     QLineEdit *inputIdConsultant;
     QLineEdit *inputTache;
@@ -81,15 +77,12 @@ public:
     void updateStats();
     void on_reset_clicked();
     void on_modifications_clicked();
-    // valeur orginal pour la modiacation (tracking system)
     QMap<QPair<int, int>, QString> originalValues;
     void on_reset_table_clicked();
-    // Add to private members
     QListWidget *chatHistory;
     QLineEdit *messageInput;
     QPushButton *sendButton;
     void initializeChatBot();
-    // Add to private slots
     void onSendMessage();
     void handleBotResponse(QNetworkReply* reply);
     QMap<QString, QString> getFirstConsultant();
@@ -111,7 +104,6 @@ public:
 private slots:
     void on_ajouter_clicked();
     void on_supp_clicked();
-
     void on_pdf_clicked();
     void on_search_s_clicked();
     void on_tri_currentIndexChanged(int index);

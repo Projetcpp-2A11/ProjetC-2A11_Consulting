@@ -7,7 +7,7 @@
 #include <QDebug>
 #include <QPair>
 
-// Forward declaration instead of including mainwindow.h to avoid circular dependency
+
 class MainWindow;
 
 class ToDo {
