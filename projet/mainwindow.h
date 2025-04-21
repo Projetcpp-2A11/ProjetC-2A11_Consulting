@@ -3,6 +3,7 @@
 #include "todo.h"
 #include <QMainWindow>
 #include <QMessageBox>
+#include <QProcess>
 #include <QMap>
 #include <QPair>
 #include <QSerialPortInfo>
@@ -21,6 +22,7 @@
 #include <QtCharts/QPieSeries>
 #include <QVBoxLayout>
 #include <QWidget>
+#include <QTableWidget>
 #include <QListWidget>
 #include <QLineEdit>
 #include <QPushButton>
@@ -40,6 +42,9 @@
 #include <QPageSize>
 #include <QMarginsF>
 #include <QTimer>
+#include <QMenu>
+#include <QAction>
+#include <QHeaderView>
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -58,13 +63,14 @@ public:
 
     QChartView *expChartView;
     QChartView *dispChartView;
-
+    void onStatusChanged(int row, int column);
+    void updateTaskStatus(int idConsultant, const QString &task, const QString &newStatus);
     void on_ajouterTache_clicked();
     void on_supprimerTache_clicked();
     void on_rafraichirListe_clicked();
     void chargerListeTaches();
     void initialiserOngletToDo();
-    QListWidget *listeTaches;
+    QTableWidget *listeTaches;
     QLineEdit *inputIdConsultant;
     QLineEdit *inputTache;
     QPushButton *boutonAjouter;
@@ -91,7 +97,6 @@ public:
     QPair<int, int> getAvailabilityStats();
     QMap<QString, int> getExperienceStats();
     int getTotalTasks();
-
     //ardunio
     void on_connectButton_clicked();
     void checkArduinoConnection();
@@ -100,6 +105,10 @@ public:
     bool arduino_is_available;
     void showConnectionStatus(bool connected);
     QNetworkAccessManager* networkManager;
+    void updateTaskStatusInRow(int row, const QString &status);
+    QProcess *ollamaProcess;
+    void startOllamaServer();
+    void stopOllamaServer();
 
 private slots:
     void on_ajouter_clicked();

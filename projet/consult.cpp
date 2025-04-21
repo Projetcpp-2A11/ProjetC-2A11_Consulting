@@ -3,7 +3,7 @@
 #include <QDebug>
 #include <QRegularExpression>
 
-//Le Constructor par defaut
+//Constructor par defaut
 Consultant::Consultant() : idCon(0), nomCon(""), prenomCon(""), emailCon(""), telCon(0), specialisation(""), experience(""), disponibilite("") {}
 
 // Constructor avec paramtére

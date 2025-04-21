@@ -14,7 +14,8 @@ MainWindow::MainWindow(QWidget *parent)
     initialiserOngletToDo();
     initializeChatBot();
     QTimer::singleShot(1000, this, &MainWindow::checkArduinoConnection);
-
+    ollamaProcess = new QProcess(this);
+    startOllamaServer();
     networkManager = new QNetworkAccessManager(this);
     connect(ui->ajouter, &QPushButton::clicked, this, &MainWindow::on_ajouter_clicked);
     connect(ui->supp, &QPushButton::clicked, this, &MainWindow::on_supp_clicked);
@@ -56,17 +57,18 @@ MainWindow::MainWindow(QWidget *parent)
     // fin arduino
     setupTable();
     populateTable();
-    
+
     // Initialize chart views on null valeur
     expChartView = nullptr;
     dispChartView = nullptr;
-    
+
     // ta5lik tbadel fi table
     ui->tableau->setEditTriggers(QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed);
 }
 
 MainWindow::~MainWindow()
 {
+    stopOllamaServer();
     if(arduino->isOpen()){
         arduino->close();
     }
@@ -76,25 +78,65 @@ MainWindow::~MainWindow()
 void MainWindow::setupTable()
 {
     ui->tableau->setColumnCount(8);
-    
+
     QStringList headers = {"ID", "Nom", "Prénom", "Email", "Téléphone", "Spécialisation", "Expérience", "Disponible"};
     ui->tableau->setHorizontalHeaderLabels(headers);
-    
+
     ui->tableau->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
 }
+
+
+void MainWindow::startOllamaServer()
+{
+    // For Windows, we need to run this through cmd.exe
+    ollamaProcess->start("cmd.exe", QStringList() << "/C" << "ollama serve");
+
+    if (!ollamaProcess->waitForStarted(3000)) {
+        qDebug() << "Failed to start Ollama server";
+        QMessageBox::warning(this, "Warning", "Could not start Ollama server automatically. Please start it manually.");
+    } else {
+        qDebug() << "Ollama server started successfully";
+
+
+        connect(ollamaProcess, &QProcess::readyReadStandardOutput, [this](){
+            qDebug() << "Ollama:" << ollamaProcess->readAllStandardOutput();
+        });
+        connect(ollamaProcess, &QProcess::readyReadStandardError, [this](){
+            qDebug() << "Ollama Error:" << ollamaProcess->readAllStandardError();
+        });
+    }
+}
+
+void MainWindow::stopOllamaServer()
+{
+    if (ollamaProcess && ollamaProcess->state() == QProcess::Running) {
+
+        ollamaProcess->terminate();
+
+        if (!ollamaProcess->waitForFinished(3000)) {
+
+            ollamaProcess->kill();
+            qDebug() << "Ollama server was force stopped";
+        } else {
+            qDebug() << "Ollama server stopped gracefully";
+        }
+    }
+}
+
+
 
 void MainWindow::populateTable()
 {
     ui->tableau->setRowCount(0);
     originalValues.clear();
-    
+
     QSqlQuery query;
     QList<Consultant> consultants = Consultant::fetchAllConsultants(query);
 
     for (const Consultant &consultant : consultants) {
         int row = ui->tableau->rowCount();
         ui->tableau->insertRow(row);
-        
+
         ui->tableau->setItem(row, 0, new QTableWidgetItem(QString::number(consultant.getIdCon())));
         ui->tableau->setItem(row, 1, new QTableWidgetItem(consultant.getNomCon()));
         ui->tableau->setItem(row, 2, new QTableWidgetItem(consultant.getPrenomCon()));
@@ -300,6 +342,90 @@ void MainWindow::on_modifications_clicked()
     }
 }
 
+
+void MainWindow::initializeChatBot()
+{
+    QWidget *chatWidget = ui->tab_5;
+    QVBoxLayout *mainLayout = new QVBoxLayout(chatWidget);
+
+    // Chat History
+    chatHistory = new QListWidget();
+    chatHistory->setStyleSheet(
+        "QListWidget {"
+        "   background-color: #f0f4f8;"
+        "   border-radius: 15px;"
+        "   padding: 10px;"
+        "}"
+        "QListWidget::item {"
+        "   background-color: #ffffff;"
+        "   border-radius: 10px;"
+        "   margin: 5px;"
+        "   padding: 10px;"
+        "}"
+        "QListWidget::item:selected {"
+        "   background-color: #e3f2fd;"
+        "}"
+        );
+    chatHistory->setWordWrap(true);
+    chatHistory->setSpacing(5);
+
+    // Input Area
+    QWidget *inputWidget = new QWidget();
+    QHBoxLayout *inputLayout = new QHBoxLayout(inputWidget);
+
+    messageInput = new QLineEdit();
+    messageInput->setPlaceholderText("taper ton message ici...");
+    messageInput->setStyleSheet(
+        "QLineEdit {"
+        "   border: 2px solid #4D6F50;"
+        "   border-radius: 15px;"
+        "   padding: 10px 15px;"
+        "   font-size: 14px;"
+        "}"
+        "QLineEdit:focus {"
+        "   border-color: #6A9E70;"
+        "}"
+        );
+
+    sendButton = new QPushButton("Envoyer!");
+    sendButton->setStyleSheet(
+        "QPushButton {"
+        "   background-color: #4D6F50;"
+        "   color: white;"
+        "   border-radius: 15px;"
+        "   padding: 10px 20px;"
+        "   font-weight: bold;"
+        "}"
+        "QPushButton:hover {"
+        "   background-color: #6A8A63;"
+        "}"
+        "QPushButton:pressed {"
+        "   background-color: #3B5D40;"
+        "}"
+        );
+    sendButton->setCursor(Qt::PointingHandCursor);
+
+    inputLayout->addWidget(messageInput);
+    inputLayout->addWidget(sendButton);
+    inputLayout->setStretch(0, 5);
+    inputLayout->setStretch(1, 1);
+
+
+    QListWidgetItem *welcomeItem = new QListWidgetItem("🤖 Bienvenue dans le ConsultantBot! comment je peux aider ?");
+    welcomeItem->setTextAlignment(Qt::AlignLeft);
+    chatHistory->addItem(welcomeItem);
+
+    mainLayout->addWidget(chatHistory);
+    mainLayout->addWidget(inputWidget);
+
+
+    connect(sendButton, &QPushButton::clicked, this, &MainWindow::onSendMessage);
+    connect(messageInput, &QLineEdit::returnPressed, this, &MainWindow::onSendMessage);
+}
+
+
+
+
 void MainWindow::on_pdf_clicked()
 {
 
@@ -343,7 +469,7 @@ void MainWindow::on_pdf_clicked()
 
     // Generatopn de PDF
     document.print(&printer);
-    //QMessageBox::information(this, "Succès", "PDF généré dans Documents_consultant/Doc.pdf");
+    QMessageBox::information(this, "Succès", "PDF généré avec Succés dans Documents_consultant/Doc.pdf");
 }
 
 
@@ -359,6 +485,11 @@ void MainWindow::on_reset_table_clicked()
 
     //QMessageBox::information(this, "Réinitialisation", "La table a été réinitialisée à son ordre original.");
 }
+
+
+
+
+
 
 
 QMap<QString, QString> MainWindow::getFirstConsultant() {
@@ -478,10 +609,10 @@ void MainWindow::on_reset_clicked()
 //debut to do list
 
 
+
 void MainWindow::initialiserOngletToDo() {
     QWidget *widgetToDo = ui->tab_4;
     QVBoxLayout *layoutPrincipal = new QVBoxLayout(widgetToDo);
-
 
     QLabel *titre = new QLabel("Liste des Tâches à Faire");
     titre->setStyleSheet("QLabel { color: #4D6F50; font-size: 20px; font-weight: bold; }");
@@ -510,14 +641,12 @@ void MainWindow::initialiserOngletToDo() {
     layoutSaisie->setStretch(1, 2);
     layoutSaisie->setStretch(3, 3);
 
-
     QWidget *zoneBoutons = new QWidget();
     QHBoxLayout *layoutBoutons = new QHBoxLayout(zoneBoutons);
 
     boutonAjouter = new QPushButton("Ajouter Tâche");
     boutonSupprimer = new QPushButton("Supprimer Tâche");
     boutonRafraichir = new QPushButton("Rafraîchir Liste");
-
 
     QString styleBouton = "QPushButton {"
                           "background: qlineargradient(spread:pad, x1:0, y1:0, x2:1, y2:1,"
@@ -538,38 +667,135 @@ void MainWindow::initialiserOngletToDo() {
     layoutBoutons->addWidget(boutonSupprimer);
     layoutBoutons->addWidget(boutonRafraichir);
 
+    // Change QListWidget to QTableWidget
+    listeTaches = new QTableWidget();
+    listeTaches->setColumnCount(3); // ID, Task, Status
+    listeTaches->setHorizontalHeaderLabels(QStringList() << "ID Consultant" << "Tâche" << "Statut");
+    listeTaches->setStyleSheet("QTableWidget { border: 2px solid #4D6F50; border-radius: 5px; }"
+                               "QTableWidget::item { padding: 5px; border-bottom: 1px solid #E0E0E0; }"
+                               "QTableWidget::item:hover { background-color: #E8F5E9; }");
+    listeTaches->horizontalHeader()->setSectionResizeMode(QHeaderView::Stretch);
+    listeTaches->setEditTriggers(QAbstractItemView::NoEditTriggers);
 
-    listeTaches = new QListWidget();
-    listeTaches->setStyleSheet("QListWidget { border: 2px solid #4D6F50; border-radius: 5px; }"
-                               "QListWidget::item { padding: 5px; border-bottom: 1px solid #E0E0E0; }"
-                               "QListWidget::item:hover { background-color: #E8F5E9; }");
+    // Connect buttons
+    connect(boutonAjouter, &QPushButton::clicked, this, &MainWindow::on_ajouterTache_clicked);
+    connect(boutonSupprimer, &QPushButton::clicked, this, &MainWindow::on_supprimerTache_clicked);
+    connect(boutonRafraichir, &QPushButton::clicked, this, &MainWindow::on_rafraichirListe_clicked);
 
+    // Add context menu for status change
+    listeTaches->setContextMenuPolicy(Qt::CustomContextMenu);
+    connect(listeTaches, &QTableWidget::customContextMenuRequested, this, [this](const QPoint &pos) {
+        QTableWidgetItem *item = listeTaches->itemAt(pos);
+        if (!item) return;
+
+        int row = item->row();
+        QMenu menu(this);
+
+        QAction *setTodo = menu.addAction("Marquer comme À faire");
+        QAction *setDoing = menu.addAction("Marquer comme En cours");
+        QAction *setDone = menu.addAction("Marquer comme Terminée");
+
+        QAction *selected = menu.exec(listeTaches->viewport()->mapToGlobal(pos));
+        if (selected == setTodo) {
+            updateTaskStatusInRow(row, "TODO");
+        } else if (selected == setDoing) {
+            updateTaskStatusInRow(row, "DOING");
+        } else if (selected == setDone) {
+            updateTaskStatusInRow(row, "DONE");
+        }
+    });
 
     layoutPrincipal->addWidget(zoneSaisie);
     layoutPrincipal->addWidget(zoneBoutons);
     layoutPrincipal->addWidget(listeTaches);
 
-    connect(boutonAjouter, &QPushButton::clicked, this, &MainWindow::on_ajouterTache_clicked);
-    connect(boutonSupprimer, &QPushButton::clicked, this, &MainWindow::on_supprimerTache_clicked);
-    connect(boutonRafraichir, &QPushButton::clicked, this, &MainWindow::on_rafraichirListe_clicked);
-
+    // Load initial tasks
     chargerListeTaches();
 }
+
+
+
+
+
+
+
+
+void MainWindow::updateTaskStatusInRow(int row, const QString &status) {
+    QTableWidgetItem *idItem = listeTaches->item(row, 0);
+    QTableWidgetItem *taskItem = listeTaches->item(row, 1);
+
+    if (idItem && taskItem) {
+        int id = idItem->text().toInt();
+        QString task = taskItem->text();
+
+        QSqlQuery query;
+        if (ToDo::updateTacheStatus(id, task, status, query)) {
+            // Update the status in the table
+            QTableWidgetItem *statusItem = new QTableWidgetItem(status);
+            listeTaches->setItem(row, 2, statusItem);
+            QMessageBox::information(this, "Succès", "Statut de la tâche mis à jour!");
+        } else {
+            QMessageBox::warning(this, "Erreur", "Échec de la mise à jour du statut.");
+        }
+    }
+}
+
+
+
+
+
+
+
+
 void MainWindow::chargerListeTaches() {
-    listeTaches->clear();
+    listeTaches->setRowCount(0);
 
     QSqlQuery query;
-    QList<QPair<int, QString>> taches = ToDo::recupererTousLesTaches(query);
+    QList<QPair<QPair<int, QString>, QString>> taches = ToDo::recupererTachesAvecStatus(query);
 
     for (const auto &tache : taches) {
-        QString itemText = QString("Consultant ID: %1 - Tâche: %2").arg(tache.first).arg(tache.second);
-        QListWidgetItem *item = new QListWidgetItem(itemText, listeTaches);
-        item->setData(Qt::UserRole, QVariant::fromValue(tache));
+        int row = listeTaches->rowCount();
+        listeTaches->insertRow(row);
+
+        listeTaches->setItem(row, 0, new QTableWidgetItem(QString::number(tache.first.first)));
+        listeTaches->setItem(row, 1, new QTableWidgetItem(tache.first.second));
+        listeTaches->setItem(row, 2, new QTableWidgetItem(tache.second));
     }
 }
 
 //fin to do list
 
+
+
+
+void MainWindow::on_rafraichirListe_clicked() {
+    chargerListeTaches();
+}
+
+
+void MainWindow::on_supprimerTache_clicked() {
+    int currentRow = listeTaches->currentRow();
+    if (currentRow < 0) {
+        QMessageBox::warning(this, "Erreur", "Veuillez sélectionner une tâche à supprimer.");
+        return;
+    }
+
+    QTableWidgetItem *idItem = listeTaches->item(currentRow, 0);
+    QTableWidgetItem *taskItem = listeTaches->item(currentRow, 1);
+
+    if (idItem && taskItem) {
+        int id = idItem->text().toInt();
+        QString task = taskItem->text();
+
+        QSqlQuery query;
+        if (ToDo::supprimerTache(id, task, query)) {
+            QMessageBox::information(this, "Succès", "Tâche supprimée avec succès!");
+            chargerListeTaches();
+        } else {
+            QMessageBox::warning(this, "Erreur", "Échec de la suppression de la tâche.");
+        }
+    }
+}
 
 void MainWindow::on_ajouterTache_clicked() {
     QString tache = inputTache->text().trimmed();
@@ -601,114 +827,14 @@ void MainWindow::on_ajouterTache_clicked() {
     }
 }
 
-void MainWindow::on_supprimerTache_clicked() {
-    QListWidgetItem *itemSelectionne = listeTaches->currentItem();
 
-    if (!itemSelectionne) {
-        QMessageBox::warning(this, "Erreur", "Veuillez sélectionner une tâche à supprimer.");
-        return;
-    }
 
-    QPair<int, QString> tache = itemSelectionne->data(Qt::UserRole).value<QPair<int, QString>>();
 
-    QSqlQuery query;
-    if (ToDo::supprimerTache(tache.first, tache.second, query)) {
-        QMessageBox::information(this, "Succès", "Tâche supprimée avec succès!");
-        chargerListeTaches();
-    } else {
-        QMessageBox::warning(this, "Erreur", "Échec de la suppression de la tâche.");
-    }
-}
-
-void MainWindow::on_rafraichirListe_clicked() {
-    chargerListeTaches();
-}
 
 
 
 
 //debut chatbot
-
-void MainWindow::initializeChatBot()
-{
-    QWidget *chatWidget = ui->tab_5;
-    QVBoxLayout *mainLayout = new QVBoxLayout(chatWidget);
-
-    // Chat History
-    chatHistory = new QListWidget();
-    chatHistory->setStyleSheet(
-        "QListWidget {"
-        "   background-color: #f0f4f8;"
-        "   border-radius: 15px;"
-        "   padding: 10px;"
-        "}"
-        "QListWidget::item {"
-        "   background-color: #ffffff;"
-        "   border-radius: 10px;"
-        "   margin: 5px;"
-        "   padding: 10px;"
-        "}"
-        "QListWidget::item:selected {"
-        "   background-color: #e3f2fd;"
-        "}"
-        );
-    chatHistory->setWordWrap(true);
-    chatHistory->setSpacing(5);
-
-    // Input Area
-    QWidget *inputWidget = new QWidget();
-    QHBoxLayout *inputLayout = new QHBoxLayout(inputWidget);
-
-    messageInput = new QLineEdit();
-    messageInput->setPlaceholderText("taper ton message ici...");
-    messageInput->setStyleSheet(
-        "QLineEdit {"
-        "   border: 2px solid #4D6F50;"
-        "   border-radius: 15px;"
-        "   padding: 10px 15px;"
-        "   font-size: 14px;"
-        "}"
-        "QLineEdit:focus {"
-        "   border-color: #6A9E70;"
-        "}"
-        );
-
-    sendButton = new QPushButton("Envoyer!");
-    sendButton->setStyleSheet(
-        "QPushButton {"
-        "   background-color: #4D6F50;"
-        "   color: white;"
-        "   border-radius: 15px;"
-        "   padding: 10px 20px;"
-        "   font-weight: bold;"
-        "}"
-        "QPushButton:hover {"
-        "   background-color: #6A8A63;"
-        "}"
-        "QPushButton:pressed {"
-        "   background-color: #3B5D40;"
-        "}"
-        );
-    sendButton->setCursor(Qt::PointingHandCursor);
-
-    inputLayout->addWidget(messageInput);
-    inputLayout->addWidget(sendButton);
-    inputLayout->setStretch(0, 5);
-    inputLayout->setStretch(1, 1);
-
-
-    QListWidgetItem *welcomeItem = new QListWidgetItem("🤖 Bienvenue dans le ConsultantBot! comment je peux aider ?");
-    welcomeItem->setTextAlignment(Qt::AlignLeft);
-    chatHistory->addItem(welcomeItem);
-
-    mainLayout->addWidget(chatHistory);
-    mainLayout->addWidget(inputWidget);
-
-
-    connect(sendButton, &QPushButton::clicked, this, &MainWindow::onSendMessage);
-    connect(messageInput, &QLineEdit::returnPressed, this, &MainWindow::onSendMessage);
-}
-
 
 
 
@@ -739,12 +865,6 @@ void MainWindow::handleBotResponse(QNetworkReply* reply)
 }
 
 
-
-
-
-
-
-
 void MainWindow::onSendMessage()
 {
     QString question = messageInput->text().trimmed();
@@ -760,7 +880,7 @@ void MainWindow::onSendMessage()
 
     messageInput->clear();
 
-
+    // n7ot commande executi ollma serv
     QUrl url("http://localhost:11434/api/generate");
     QNetworkRequest request(url);
     request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
@@ -789,7 +909,7 @@ void MainWindow::onSendMessage()
 
 
 
-            // arduinoooo
+// arduinoooo
 
 
 
@@ -799,7 +919,6 @@ void MainWindow::onSendMessage()
 
 
 
-//arduino
 
 
 void MainWindow::on_connectButton_clicked()
@@ -813,7 +932,7 @@ void MainWindow::showConnectionStatus(bool connected)
         QMessageBox::information(this, "Connection Status",
                                  "Arduino is connected and responding!");
     } else {
-    //    QMessageBox::critical(this, "Connection Status","Arduino is not connected or not responding!");
+        //    QMessageBox::critical(this, "Connection Status","Arduino is not connected or not responding!");
     }
 }
 
@@ -839,4 +958,3 @@ void MainWindow::checkArduinoConnection()
     qDebug() << "ERROR: Arduino not connected or not responding!";
     showConnectionStatus(false);
 }
-

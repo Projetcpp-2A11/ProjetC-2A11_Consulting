@@ -13,9 +13,8 @@ int main(int argc, char *argv[])
 
 
     MainWindow w;
-
-
     Connection c;
+
     bool test = c.createconnect();
      a.setWindowIcon(QIcon("C:/Users/nourii/Desktop/Project QT/projet/outils/Logo_Stradedgge.png"));
     if (test) {
