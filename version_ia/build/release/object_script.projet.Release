@@ -1,0 +1,10 @@
+release/main.o
+release/mainwindow.o
+release/projet.o
+release/connection.o
+release/employe_widget.o
+release/employe.o
+release/modelphotoemploye.o
+release/qrc_ressource.o
+release/moc_mainwindow.o
+release/moc_employe_widget.o
