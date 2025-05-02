@@ -3,6 +3,7 @@
 #include "ui_mainwindow.h"
 #include "login.h"
 #include "modelphotoemploye.h"
+#include "arduino.h"
 #include <QMessageBox>
 #include <QSqlError>
 #include <QString>
@@ -16,11 +17,13 @@
 #include <QDir>
 #include <QInputDialog>
 #include <QBuffer>
+#include <QSerialPort>
+#include <QSerialPortInfo>
+#include <QDebug>
 
-// Attribut global pour stocker la photo temporairement
 QByteArray photoBuffer;
+QString photoPath;
 
-// Constructor and Destructor
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -29,15 +32,30 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->tabWidget->setCurrentIndex(0);
     activerOngletsSelonPoste("");
-    //connect(ui->login_3, &QPushButton::clicked, this, &MainWindow::on_login_3_clicked);
 
+    int ret = A.connect_arduino(); // Lancer la connexion à l'Arduino
+    switch (ret) {
+    case 0:
+        qDebug() << "Arduino is available and connected to :" << A.getarduino_port_name();
+        break;
+    case 1:
+        qDebug() << "Arduino is available but not connected to :" << A.getarduino_port_name();
+        break;
+    case -1:
+        qDebug() << "Arduino is not available";
+        break;
+    }
 
+    // Connecter le signal "readyRead" du port série au slot "update_label"
+    QObject::connect(A.getserial(), SIGNAL(readyRead()), this, SLOT(update_label()));
 }
 
 MainWindow::~MainWindow()
 {
+
     delete ui;
 }
+
 
 // Function to add an employee
 void MainWindow::on_ajouter_clicked()
@@ -50,7 +68,7 @@ void MainWindow::on_ajouter_clicked()
     QString poste = ui->comboBox->currentText();
     QString dateDeNaissance = ui->dateEdit->date().toString("yyyy-MM-dd");
 
-    // 📷 Choix de la photo
+
     QString imagePath = QFileDialog::getOpenFileName(this, tr("Choisir une photo"),
                                                      "", tr("Images (*.png *.jpg *.jpeg *.bmp)"));
     QByteArray photo;
@@ -86,7 +104,7 @@ void MainWindow::on_ajouter_clicked()
         return;
     }
 
-    // 👨‍💼 Création de l'objet Employe avec photo
+
     Employe E(nom, prenom, telephone, poste, email, motDePasse, dateDeNaissance, photo); // constructeur avec photo
 
     if (E.ajouter()) {
@@ -132,7 +150,7 @@ void MainWindow::on_tabWidget_2_currentChanged(int index)
         }
 
         // 4. Configurer l'affichage des photos
-        const int photoColumn = 8; // Ajustez selon votre structure de données
+        const int photoColumn = 8;
 
         if (model->columnCount() > photoColumn) {
             // Nettoyer l'ancien delegate
@@ -386,7 +404,78 @@ void MainWindow::on_pushButton_clicked()
         }
 
 }
+void MainWindow::on_movementDetected() {
+    // Demander l'email à l'utilisateur
+    bool ok;
+    QString email = QInputDialog::getText(this, "Demande d'email", "Veuillez entrer votre email:", QLineEdit::Normal, "", &ok);
+    if (ok && !email.isEmpty()) {
+        // Validation basique de l'email
+        if (email.contains("@") && email.contains(".")) {
+            // Envoie de l'email à Arduino
+            arduino->write(email.toUtf8());
+            // Attente de la réponse d'Arduino
+            connect(arduino, &QSerialPort::readyRead, this, &MainWindow::readFromArduino);
+        } else {
+            QMessageBox::warning(this, "Email invalide", "L'email entré n'est pas valide.");
+        }
+    }
+}
 
+void MainWindow::readFromArduino() {
+    QByteArray data = arduino->readAll();
+    QString message = QString::fromUtf8(data);
+
+    if (message.contains("MOTION_DETECTED")) {
+        // Demander l'email lorsque le mouvement est détecté
+        on_movementDetected();
+    } else if (message.contains("ERROR:INVALID_EMAIL")) {
+        QMessageBox::warning(this, "Erreur", "Email invalide.");
+    } else if (message.contains("STATUS:OPENED")) {
+        QMessageBox::information(this, "Porte ouverte", "La porte a été ouverte avec succès.");
+    }
+}
+void MainWindow::update_label() {
+    QByteArray data = A.read_from_arduino();
+    QString message = QString::fromStdString(data.toStdString()).trimmed();
+
+    qDebug() << "Message from Arduino:" << message;
+
+    if (message.contains("EVENT:MOTION")) {
+        qDebug() << "Mouvement détecté";
+        askForEmailAndVerify();
+    } else if (message.contains("STATUS:OPENED")) {
+        QMessageBox::information(this, "Succès", "Porte ouverte avec succès!");
+    } else if (message.contains("ERROR")) {
+        QMessageBox::warning(this, "Erreur", message);
+    }
+}
+
+void MainWindow::askForEmailAndVerify() {
+    bool ok;
+    QString email = QInputDialog::getText(this, "Vérification d'accès",
+                                          "Mouvement détecté! Entrez votre email:",
+                                          QLineEdit::Normal, "", &ok);
+
+    if (ok && !email.isEmpty()) {
+        // Vérifier si l'email existe dans la base de données
+        QSqlQuery query;
+        query.prepare("SELECT COUNT(*) FROM EMPLOYE WHERE EMAIL = :email");
+        query.bindValue(":email", email);
+
+        if (query.exec() && query.next()) {
+            int count = query.value(0).toInt();
+            if (count > 0) {
+                // Email valide - envoyer à Arduino
+                A.write_to_arduino(email.toUtf8() + '\n');
+                QMessageBox::information(this, "Succès", "Email vérifié. Accès accordé.");
+            } else {
+                QMessageBox::warning(this, "Erreur", "Email non reconnu. Accès refusé.");
+            }
+        } else {
+            QMessageBox::critical(this, "Erreur", "Erreur de base de données: " + query.lastError().text());
+        }
+    }
+}
 
 
 

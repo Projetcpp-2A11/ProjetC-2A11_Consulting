@@ -88,7 +88,7 @@ QTabBar::tab:hover {
      <enum>QTabWidget::TabShape::Rounded</enum>
     </property>
     <property name="currentIndex">
-     <number>1</number>
+     <number>0</number>
     </property>
     <property name="iconSize">
      <size>
@@ -260,7 +260,7 @@ QTabBar::tab:hover {
      <widget class="QTabWidget" name="tabWidget_2">
       <property name="geometry">
        <rect>
-        <x>70</x>
+        <x>50</x>
         <y>20</y>
         <width>921</width>
         <height>561</height>
@@ -293,7 +293,7 @@ QTabBar::tab {
 }</string>
       </property>
       <property name="currentIndex">
-       <number>1</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="tab_3">
        <attribute name="title">
@@ -676,19 +676,6 @@ QTabBar::tab {
         </property>
         <property name="text">
          <string>photo</string>
-        </property>
-       </widget>
-       <widget class="QPushButton" name="scannerVisageBoutton">
-        <property name="geometry">
-         <rect>
-          <x>512</x>
-          <y>440</y>
-          <width>161</width>
-          <height>29</height>
-         </rect>
-        </property>
-        <property name="text">
-         <string>Scanner visage</string>
         </property>
        </widget>
       </widget>
