@@ -3,6 +3,7 @@
 
 #include <QMainWindow>
 #include"employe.h"
+#include "arduino.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -17,6 +18,7 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+
 
 private slots:
     void on_ajouter_clicked();
@@ -48,6 +50,12 @@ private slots:
     bool updatePasswordInDB(const QString& email, const QString& phone, const QString& newmotDePasse);
 
     void on_pushButton_clicked();
+    void on_movementDetected();  // Slot pour demander l'email à l'utilisateur
+    void readFromArduino();
+    void update_label();
+    void askForEmailAndVerify();
+
+
 
 
 
@@ -57,6 +65,8 @@ private:
     Ui::MainWindow *ui;
     int failedLoginAttempts = 0;
     QString photoPath;
-
+    QByteArray data;
+    Arduino A;
+QSerialPort *arduino;
 };
 #endif // MAINWINDOW_H
