@@ -64,13 +64,18 @@ void Arduino::write_to_arduino(QByteArray data) {
         qDebug()<<"couldn't write to serial ";}
 }
 
-QByteArray Arduino::read_from_arduino() {
-    if (serial->isReadable()) {
+QByteArray Arduino::read_from_arduino()
+{
+    QByteArray data;
+
+    if (serial->isOpen() && serial->isReadable()) {
         data = serial->readAll();
         return data;
     }
 
+    return QByteArray(); // <== Ajout important pour éviter le warning
 }
+
 
 QSerialPort* Arduino::getserial() {
     return serial;

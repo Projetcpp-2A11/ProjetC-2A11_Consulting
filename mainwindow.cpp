@@ -30,7 +30,7 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
 
-    ui->tabWidget->setCurrentIndex(0);
+    ui->tabWidget_2->setCurrentIndex(0);
     activerOngletsSelonPoste("");
 
     int ret = A.connect_arduino(); // Lancer la connexion à l'Arduino
@@ -58,15 +58,15 @@ MainWindow::~MainWindow()
 
 
 // Function to add an employee
-void MainWindow::on_ajouter_clicked()
+void MainWindow::on_ajouter_5_clicked()
 {
-    QString nom = ui->lineEdit_3->text();
-    QString prenom = ui->lineEdit_6->text();
-    QString email = ui->lineEdit_7->text();
-    QString motDePasse = ui->lineEdit_8->text();
-    QString telephone = ui->lineEdit_4->text();
-    QString poste = ui->comboBox->currentText();
-    QString dateDeNaissance = ui->dateEdit->date().toString("yyyy-MM-dd");
+    QString nom = ui->lineEdit_12->text();
+    QString prenom = ui->lineEdit_17->text();
+    QString email = ui->lineEdit_18->text();
+    QString motDePasse = ui->lineEdit_19->text();
+    QString telephone = ui->lineEdit_16->text();
+    QString poste = ui->comboBox_3->currentText();
+    QString dateDeNaissance = ui->dateEdit_3->date().toString("yyyy-MM-dd");
 
 
     QString imagePath = QFileDialog::getOpenFileName(this, tr("Choisir une photo"),
@@ -108,29 +108,29 @@ void MainWindow::on_ajouter_clicked()
     Employe E(nom, prenom, telephone, poste, email, motDePasse, dateDeNaissance, photo); // constructeur avec photo
 
     if (E.ajouter()) {
-        ui->tab_emp->setModel(E.afficher());
+        ui->tab_emp_2->setModel(E.afficher());
         QMessageBox::information(this, tr("Succès"), tr("Ajout réussi !"));
 
         // Afficher la photo ajoutée
         QPixmap pixmap;
         pixmap.loadFromData(photo);
-        ui->label_pic->setPixmap(pixmap.scaled(ui->label_pic->size(), Qt::KeepAspectRatio));
+        ui->label_pic_2->setPixmap(pixmap.scaled(ui->label_pic_2->size(), Qt::KeepAspectRatio));
 
         // Nettoyer le formulaire
-        ui->lineEdit_3->clear();
-        ui->lineEdit_6->clear();
-        ui->lineEdit_7->clear();
-        ui->lineEdit_8->clear();
-        ui->lineEdit_4->clear();
-        ui->comboBox->setCurrentIndex(0);
-        ui->dateEdit->clear();
+        ui->lineEdit_12->clear();
+        ui->lineEdit_17->clear();
+        ui->lineEdit_18->clear();
+        ui->lineEdit_19->clear();
+        ui->lineEdit_16->clear();
+        ui->comboBox_3->setCurrentIndex(0);
+        ui->dateEdit_3->clear();
     } else {
         QMessageBox::critical(this, tr("Erreur"), tr("L'ajout a échoué !"));
     }
 }
 
 
-void MainWindow::on_tabWidget_2_currentChanged(int index)
+void MainWindow::on_tabWidget_5_currentChanged(int index)
 {
 
         // 1. Charger le modèle de données
@@ -141,7 +141,7 @@ void MainWindow::on_tabWidget_2_currentChanged(int index)
         }
 
         // 2. Appliquer le modèle à la table
-        ui->tab_emp->setModel(model);
+        ui->tab_emp_2->setModel(model);
 
         // 3. Debug: Vérifier la structure des données
         qDebug() << "Nombre de colonnes:" << model->columnCount();
@@ -154,43 +154,43 @@ void MainWindow::on_tabWidget_2_currentChanged(int index)
 
         if (model->columnCount() > photoColumn) {
             // Nettoyer l'ancien delegate
-            QAbstractItemDelegate *oldDelegate = ui->tab_emp->itemDelegateForColumn(photoColumn);
+            QAbstractItemDelegate *oldDelegate = ui->tab_emp_2->itemDelegateForColumn(photoColumn);
             if (oldDelegate) {
                 oldDelegate->deleteLater();
             }
 
             // Appliquer le nouveau delegate
             ModelPhotoEmploye *photoDelegate = new ModelPhotoEmploye(this);
-            ui->tab_emp->setItemDelegateForColumn(photoColumn, photoDelegate);
+            ui->tab_emp_2->setItemDelegateForColumn(photoColumn, photoDelegate);
 
             // Configuration des dimensions
-            ui->tab_emp->setColumnWidth(photoColumn, 150); // Largeur
-            ui->tab_emp->verticalHeader()->setDefaultSectionSize(150); // Hauteur
+            ui->tab_emp_2->setColumnWidth(photoColumn, 150); // Largeur
+            ui->tab_emp_2->verticalHeader()->setDefaultSectionSize(150); // Hauteur
 
 
 
 
             // Forcer le redessin de la table
-            ui->tab_emp->viewport()->update();
+            ui->tab_emp_2->viewport()->update();
         } else {
             qWarning() << "Avertissement: La colonne photo (index" << photoColumn << ") n'existe pas dans le modèle";
         }
 
         // 5. Optimisations supplémentaires
-        ui->tab_emp->setSelectionBehavior(QAbstractItemView::SelectRows);
-        ui->tab_emp->setSelectionMode(QAbstractItemView::SingleSelection);
-        ui->tab_emp->setAlternatingRowColors(true);
-        ui->tab_emp->horizontalHeader()->setStretchLastSection(true);
-        ui->tab_emp->setSortingEnabled(true);
+        ui->tab_emp_2->setSelectionBehavior(QAbstractItemView::SelectRows);
+        ui->tab_emp_2->setSelectionMode(QAbstractItemView::SingleSelection);
+        ui->tab_emp_2->setAlternatingRowColors(true);
+        ui->tab_emp_2->horizontalHeader()->setStretchLastSection(true);
+        ui->tab_emp_2->setSortingEnabled(true);
 
 }
 
-void MainWindow::on_Supprimer_emp_clicked()
+void MainWindow::on_Supprimer_emp_2_clicked()
 {
-    bool test=E.supprimer(ui->tab_emp->currentIndex().model()->index(ui->tab_emp->currentIndex().row(),0,ui->tab_emp->currentIndex().parent()).data().toInt());
+    bool test=E.supprimer(ui->tab_emp_2->currentIndex().model()->index(ui->tab_emp_2->currentIndex().row(),0,ui->tab_emp_2->currentIndex().parent()).data().toInt());
     if(test)
     {
-        ui->tab_emp->setModel(E.afficher());
+        ui->tab_emp_2->setModel(E.afficher());
     }
     else
     {
@@ -200,78 +200,78 @@ void MainWindow::on_Supprimer_emp_clicked()
     }
 }
 
-void MainWindow::on_modifier_2_clicked()
+void MainWindow::on_modifier_6_clicked()
 {
     ui->tabWidget_2->setCurrentIndex(2);
-    E.SetDonnees((ui->tab_emp->currentIndex().model()->index(ui->tab_emp->currentIndex().row(),0,ui->tab_emp->currentIndex().parent()).data().toInt()));
+    E.SetDonnees((ui->tab_emp_2->currentIndex().model()->index(ui->tab_emp_2->currentIndex().row(),0,ui->tab_emp_2->currentIndex().parent()).data().toInt()));
 
-    ui->lineEdit_10->setText(E.getNomEMP());
-    ui->lineEdit_11->setText(E.getPrenomEMP());
-    ui->lineEdit_14->setText(E.getEmail());
-    ui->lineEdit_15->setText(E.getMotDePasse());
-    ui->lineEdit_13->setText(E.getTelephone());
-    ui->comboBox_2->setCurrentText(E.getPoste());
-    ui->dateEdit->setDate(QDate::fromString(E.getDateDeNaissance(), "yyyy-MM-dd"));
+    ui->lineEdit_20->setText(E.getNomEMP());
+    ui->lineEdit_21->setText(E.getPrenomEMP());
+    ui->lineEdit_24->setText(E.getEmail());
+    ui->lineEdit_23->setText(E.getMotDePasse());
+    ui->lineEdit_22->setText(E.getTelephone());
+    ui->comboBox_4->setCurrentText(E.getPoste());
+    ui->dateEdit_4->setDate(QDate::fromString(E.getDateDeNaissance(), "yyyy-MM-dd"));
     photoBuffer = E.getPhoto(); // ✅ récupération de l'image
 }
 
-void MainWindow::on_modifier_clicked()
+void MainWindow::on_modifier_10_clicked()
 {
-    QString nom = ui->lineEdit_10->text();
-    QString prenom = ui->lineEdit_11->text();
-    QString email = ui->lineEdit_14->text();
-    QString motDePasse = ui->lineEdit_15->text();
-    QString telephone = ui->lineEdit_13->text();
-    QString poste = ui->comboBox_2->currentText();
-    QString dateDeNaissance = ui->dateEdit_2->date().toString("yyyy-MM-dd");
+    QString nom = ui->lineEdit_20->text();
+    QString prenom = ui->lineEdit_21->text();
+    QString email = ui->lineEdit_24->text();
+    QString motDePasse = ui->lineEdit_23->text();
+    QString telephone = ui->lineEdit_22->text();
+    QString poste = ui->comboBox_4->currentText();
+    QString dateDeNaissance = ui->dateEdit_4->date().toString("yyyy-MM-dd");
 
     Employe E(nom, prenom, telephone, poste, email, motDePasse, dateDeNaissance);
     E.setPhoto(photoBuffer); // ✅ mise à jour photo
 
-    if(E.modifier((ui->tab_emp->currentIndex().model()->index(ui->tab_emp->currentIndex().row(),0,ui->tab_emp->currentIndex().parent()).data().toInt())))
+    if(E.modifier((ui->tab_emp_2->currentIndex().model()->index(ui->tab_emp_2->currentIndex().row(),0,ui->tab_emp_2->currentIndex().parent()).data().toInt())))
     {
-        ui->tab_emp->setModel(E.afficher());
+        ui->tab_emp_2->setModel(E.afficher());
         QMessageBox::information(nullptr,QObject::tr("OK"),QObject::tr("Modification effectuée\n""Click Cancel to exit."),QMessageBox::Cancel);
     }
     else
         QMessageBox::critical(nullptr,QObject::tr("Not OK"),QObject::tr("Modification non effectuée\n""Click Cancel to exit."),QMessageBox::Cancel);
 }
 
-void MainWindow::on_modifier_3_clicked()
+void MainWindow::on_modifier_7_clicked()
 {
     Employe e;
     QSqlQueryModel* model = E.trierPar("nom");
     if (model) {
-        ui->tab_emp->setModel(model);
+        ui->tab_emp_2->setModel(model);
     }
 }
 
-void MainWindow::on_modifier_4_clicked()
+void MainWindow::on_modifier_8_clicked()
 {
     Employe e;
     QSqlQueryModel* model = E.trierPar("prenom");
     if (model) {
-        ui->tab_emp->setModel(model);
+        ui->tab_emp_2->setModel(model);
     }
 }
 
-void MainWindow::on_modifier_5_clicked()
+void MainWindow::on_modifier_9_clicked()
 {
-    QString nomRecherche = ui->lineEdit_5->text();
+    QString nomRecherche = ui->lineEdit_9->text();
     Employe emp;
     QSqlQueryModel* model = E.rechercherParNom(nomRecherche);
 
     if (model) {
-        ui->tab_emp->setModel(model);
+        ui->tab_emp_2->setModel(model);
     } else {
         QMessageBox::warning(this, "Recherche", "Aucun résultat trouvé ou erreur de recherche.");
     }
 }
 
-void MainWindow::on_login_clicked()
+void MainWindow::on_login_3_clicked()
 {
-    QString email = ui->lineEdit->text();
-    QString motdepasse = ui->lineEdit_2->text();
+    QString email = ui->lineEdit_25->text();
+    QString motdepasse = ui->lineEdit_26->text();
 
     if (email.isEmpty() || motdepasse.isEmpty()) {
         QMessageBox::warning(this, "Champs vides", "Veuillez remplir tous les champs.");
@@ -298,7 +298,7 @@ void MainWindow::on_login_clicked()
                 );
 
             if (response == QMessageBox::Yes) {
-                on_login_2_clicked();
+                on_login_3_clicked();
             }
 
             failedLoginAttempts = 0;
@@ -308,23 +308,23 @@ void MainWindow::on_login_clicked()
 
 void MainWindow::activerOngletsSelonPoste(const QString &poste)
 {
-    int totalTabs = ui->tabWidget->count();
+    int totalTabs = ui->tabWidget_2->count();
     for (int i = 1; i < totalTabs; ++i) {
-        ui->tabWidget->setTabEnabled(i, false);
+        ui->tabWidget_2->setTabEnabled(i, false);
     }
 
     if (poste == "Admin") {
         for (int i = 1; i < totalTabs; ++i) {
-            ui->tabWidget->setTabEnabled(i, true);
+            ui->tabWidget_2->setTabEnabled(i, true);
         }
     }
     else if (poste == "Directeur") {
-        ui->tabWidget->setTabEnabled(1, true);
-        ui->tabWidget->setTabEnabled(2, true);
+        ui->tabWidget_2->setTabEnabled(1, true);
+        ui->tabWidget_2->setTabEnabled(2, true);
     }
     else if (poste == "RH") {
-        ui->tabWidget->setTabEnabled(3, true);
-        ui->tabWidget->setTabEnabled(5, true);
+        ui->tabWidget_2->setTabEnabled(3, true);
+        ui->tabWidget_2->setTabEnabled(5, true);
     }
 }
 
@@ -359,7 +359,7 @@ bool MainWindow::updatePasswordInDB(const QString& email, const QString& telepho
     return true;
 }
 
-void MainWindow::on_login_2_clicked()
+void MainWindow::on_login_4_clicked()
 {
     bool ok;
     QString email = QInputDialog::getText(this, tr("Forgot Password"), tr("Enter your email:"), QLineEdit::Normal, "", &ok);
@@ -387,7 +387,7 @@ void MainWindow::on_login_2_clicked()
 
 
 
-void MainWindow::on_pushButton_clicked()
+void MainWindow::on_pushButton_5_clicked()
 {
 
         photoPath = QFileDialog::getOpenFileName(this, "Sélectionner une photo",
@@ -397,7 +397,7 @@ void MainWindow::on_pushButton_clicked()
         if (!photoPath.isEmpty()) {
             QPixmap pixmap(photoPath);
             if (!pixmap.isNull()) {
-                ui->label_pic->setPixmap(pixmap.scaled(100, 100, Qt::KeepAspectRatio));
+                ui->label_pic_2->setPixmap(pixmap.scaled(100, 100, Qt::KeepAspectRatio));
             } else {
                 QMessageBox::warning(this, "Erreur", "Impossible de charger l'image");
             }

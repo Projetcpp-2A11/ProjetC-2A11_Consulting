@@ -32,6 +32,8 @@ FORMS += \
     mainwindow.ui
 
 RESOURCES += \
+    knj.qrc \
+    lo.qrc \
     ressource.qrc
 
 DISTFILES += \
