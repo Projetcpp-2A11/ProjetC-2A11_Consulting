@@ -1,0 +1,5 @@
+<RCC>
+    <qresource prefix="/">
+        <file>loop.png</file>
+    </qresource>
+</RCC>
