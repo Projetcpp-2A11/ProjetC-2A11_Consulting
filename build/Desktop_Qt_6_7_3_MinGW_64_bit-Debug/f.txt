@@ -1,0 +1,8 @@
+ID_EMP: 4
+NOM_EMP: mourad
+PRENOM_EMP: mourad
+POSTE: Directeur
+TELEPHONE: 235464
+DATE_NAISSANCE: Thu Jun 1 2006
+MDPS: gyjfhdg
+EMAIL: zfed@gmail.com
