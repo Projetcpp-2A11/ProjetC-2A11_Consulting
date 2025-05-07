@@ -887,7 +887,7 @@ QTabBar::tab:hover {
        <enum>QTabWidget::TabPosition::West</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <property name="iconSize">
        <size>
@@ -1159,7 +1159,7 @@ QTabBar::tab:hover {
 </string>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="tab_32">
          <attribute name="title">
@@ -1776,6 +1776,11 @@ QPushButton:pressed {
           </item>
           <item>
            <property name="text">
+            <string>Chef Projet</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
             <string>Admin</string>
            </property>
           </item>
@@ -2334,8 +2339,8 @@ color: rgb(0, 0, 0);</string>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources>
-  <include location="knj.qrc"/>
   <include location="ressource.qrc"/>
+  <include location="knj.qrc"/>
  </resources>
  <connections/>
 </ui>

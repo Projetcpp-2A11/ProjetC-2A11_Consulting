@@ -320,11 +320,20 @@ void MainWindow::activerOngletsSelonPoste(const QString &poste)
     }
     else if (poste == "Directeur") {
         ui->tabWidget_2->setTabEnabled(1, true);
-        ui->tabWidget_2->setTabEnabled(2, true);
-    }
-    else if (poste == "RH") {
         ui->tabWidget_2->setTabEnabled(3, true);
+    }
+    else if (poste == "Rh") {
+        ui->tabWidget_2->setTabEnabled(6, true);
         ui->tabWidget_2->setTabEnabled(5, true);
+
+    }
+    else if (poste == "Chef Projet") {
+        ui->tabWidget_2->setTabEnabled(4, true);
+
+    }
+    else if (poste == "Consultant") {
+        ui->tabWidget_2->setTabEnabled(2, true);
+
     }
 }
 
