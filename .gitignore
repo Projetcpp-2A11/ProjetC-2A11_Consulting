@@ -1,0 +1,19 @@
+# Ignore le dossier de build
+build/
+
+# Fichiers compilés et temporaires
+*.o
+*.obj
+*.exe
+*.dll
+*.so
+*.a
+
+# Fichiers générés par Qt
+*.user
+*.pro.user
+*.autosave
+ui_*.h
+moc_*.cpp
+qrc_*.cpp
+

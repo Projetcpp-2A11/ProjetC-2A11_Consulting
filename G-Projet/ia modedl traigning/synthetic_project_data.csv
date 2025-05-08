@@ -1,0 +1,101 @@
+Nom-Projet,Complexité,Statue,Budget,Nom-Client,Date-Début,Date-Fin
+Project 1,Faible,En attente,12000,Client A,2025-05-01,2025-08-01
+Project 2,Moyenne,En cours,45000,Client B,2024-11-15,2025-02-15
+Project 3,Élevée,Terminé,88000,Client C,2024-05-01,2024-08-15
+Project 4,Faible,Annulé,7500,Client D,2023-07-01,2023-10-01
+Project 5,Moyenne,Terminé,37000,Client E,2023-03-01,2023-06-15
+Project 6,Élevée,En cours,98000,Client F,2022-12-01,2023-04-01
+Project 7,Faible,Terminé,20000,Client G,2022-08-01,2022-10-15
+Project 8,Moyenne,En attente,15000,Client H,2022-04-01,2022-07-01
+Project 9,Élevée,Annulé,70000,Client I,2022-01-01,2022-05-01
+Project 10,Faible,Terminé,18000,Client J,2021-11-01,2022-01-15
+Project 11,Moyenne,En attente,25000,Client K,2025-03-01,2025-06-01
+Project 12,Faible,En cours,6000,Client L,2024-12-01,2025-03-01
+Project 13,Élevée,Terminé,92000,Client M,2024-06-01,2024-10-01
+Project 14,Moyenne,Annulé,30000,Client N,2023-09-01,2024-01-01
+Project 15,Faible,Terminé,14000,Client O,2023-02-01,2023-05-01
+Project 16,Élevée,En cours,85000,Client P,2022-11-01,2023-03-01
+Project 17,Moyenne,En attente,32000,Client Q,2022-07-01,2022-10-01
+Project 18,Faible,Annulé,9000,Client R,2022-02-01,2022-06-01
+Project 19,Élevée,Terminé,78000,Client S,2021-10-01,2022-02-15
+Project 20,Moyenne,En cours,35000,Client T,2025-01-01,2025-04-01
+Project 21,Élevée,En attente,67000,Client U,2023-05-01,2023-09-01
+Project 22,Faible,En cours,5600,Client V,2024-08-01,2024-11-01
+Project 23,Moyenne,Terminé,31000,Client W,2023-01-01,2023-04-15
+Project 24,Faible,Annulé,12000,Client X,2023-06-01,2023-09-01
+Project 25,Élevée,Terminé,95000,Client Y,2023-03-01,2023-08-01
+Project 26,Faible,En cours,13000,Client Z,2022-09-01,2022-12-15
+Project 27,Moyenne,En attente,28000,Client AA,2022-05-01,2022-09-01
+Project 28,Élevée,Annulé,88000,Client AB,2021-12-01,2022-04-01
+Project 29,Faible,Terminé,17000,Client AC,2021-10-01,2022-01-01
+Project 30,Moyenne,En cours,44000,Client AD,2025-04-01,2025-07-01
+Project 31,Faible,En attente,15000,Client AE,2025-01-15,2025-04-15
+Project 32,Élevée,Terminé,92000,Client AF,2024-07-01,2024-11-01
+Project 33,Moyenne,Annulé,24000,Client AG,2023-10-01,2024-02-01
+Project 34,Faible,Terminé,12000,Client AH,2023-01-01,2023-04-01
+Project 35,Élevée,En cours,87000,Client AI,2022-06-01,2022-10-01
+Project 36,Moyenne,En attente,30000,Client AJ,2022-03-01,2022-06-01
+Project 37,Faible,Annulé,9000,Client AK,2021-12-01,2022-03-01
+Project 38,Élevée,Terminé,86000,Client AL,2021-09-01,2022-01-01
+Project 39,Moyenne,En cours,32000,Client AM,2025-02-01,2025-05-01
+Project 40,Faible,En attente,11000,Client AN,2024-09-01,2024-12-01
+Project 41,Élevée,En attente,70000,Client AO,2023-08-01,2023-12-01
+Project 42,Moyenne,En cours,42000,Client AP,2024-05-01,2024-08-01
+Project 43,Faible,Terminé,15000,Client AQ,2023-04-01,2023-07-01
+Project 44,Élevée,Annulé,89000,Client AR,2022-11-01,2023-03-01
+Project 45,Moyenne,Terminé,27000,Client AS,2022-02-01,2022-06-15
+Project 46,Faible,En cours,13000,Client AT,2025-03-01,2025-06-01
+Project 47,Élevée,En attente,68000,Client AU,2024-10-01,2025-02-01
+Project 48,Moyenne,Annulé,34000,Client AV,2023-07-01,2023-10-01
+Project 49,Faible,Terminé,12000,Client AW,2022-08-01,2022-12-01
+Project 50,Élevée,En cours,97000,Client AX,2021-11-01,2022-03-01
+Project 51,Moyenne,En attente,26000,Client AY,2025-02-15,2025-05-15
+Project 52,Faible,Annulé,8000,Client AZ,2024-06-01,2024-09-01
+Project 53,Élevée,Terminé,91000,Client BA,2023-05-01,2023-09-01
+Project 54,Faible,En cours,11000,Client BB,2022-04-01,2022-07-01
+Project 55,Moyenne,Annulé,22000,Client BC,2021-12-01,2022-04-01
+Project 56,Élevée,Terminé,94000,Client BD,2021-10-01,2022-02-01
+Project 57,Faible,En attente,18000,Client BE,2024-08-01,2024-11-01
+Project 58,Moyenne,En cours,37000,Client BF,2023-03-01,2023-06-15
+Project 59,Élevée,Annulé,78000,Client BG,2022-09-01,2023-01-01
+Project 60,Faible,Terminé,16000,Client BH,2021-08-01,2021-12-01
+Project 61,Moyenne,En attente,30000,Client BI,2023-06-01,2023-10-01
+Project 62,Élevée,En cours,87000,Client BJ,2022-03-01,2022-07-01
+Project 63,Faible,Annulé,11000,Client BK,2021-11-01,2022-02-01
+Project 64,Moyenne,Terminé,31000,Client BL,2025-01-01,2025-04-15
+Project 65,Élevée,En attente,64000,Client BM,2024-05-01,2024-09-01
+Project 66,Faible,En cours,15000,Client BN,2023-02-01,2023-05-01
+Project 67,Moyenne,Annulé,25000,Client BO,2022-07-01,2022-11-01
+Project 68,Élevée,Terminé,89000,Client BP,2021-09-01,2022-01-15
+Project 69,Faible,En attente,17000,Client BQ,2024-06-01,2024-09-01
+Project 70,Moyenne,En cours,40000,Client BR,2023-03-01,2023-06-01
+Project 71,Élevée,Annulé,83000,Client BS,2022-08-01,2022-12-01
+Project 72,Faible,Terminé,14000,Client BT,2021-06-01,2021-09-01
+Project 73,Moyenne,En attente,28000,Client BU,2023-05-01,2023-09-01
+Project 74,Élevée,En cours,92000,Client BV,2022-01-01,2022-06-01
+Project 75,Faible,Annulé,10000,Client BW,2021-10-01,2022-01-01
+Project 76,Moyenne,Terminé,32000,Client BX,2025-03-01,2025-06-01
+Project 77,Élevée,En attente,76000,Client BY,2024-09-01,2025-01-01
+Project 78,Faible,En cours,7000,Client BZ,2023-06-01,2023-09-01
+Project 79,Moyenne,Annulé,29000,Client CA,2022-09-01,2022-12-01
+Project 80,Élevée,Terminé,87000,Client CB,2021-11-01,2022-03-01
+Project 81,Faible,En attente,12000,Client CC,2024-07-01,2024-10-01
+Project 82,Moyenne,En cours,34000,Client CD,2023-02-01,2023-06-01
+Project 83,Élevée,Annulé,78000,Client CE,2022-04-01,2022-08-01
+Project 84,Faible,Terminé,10000,Client CF,2021-08-01,2021-11-01
+Project 85,Moyenne,Annulé,26000,Client CG,2023-05-01,2023-09-01
+Project 86,Élevée,En cours,94000,Client CH,2022-01-01,2022-05-01
+Project 87,Faible,En attente,15000,Client CI,2021-12-01,2022-03-01
+Project 88,Moyenne,En cours,39000,Client CJ,2025-02-01,2025-05-15
+Project 89,Élevée,En attente,67000,Client CK,2024-10-01,2025-02-01
+Project 90,Faible,Annulé,8000,Client CL,2023-07-01,2023-10-01
+Project 91,Moyenne,Terminé,31000,Client CM,2022-09-01,2023-01-01
+Project 92,Élevée,En cours,91000,Client CN,2021-11-01,2022-03-01
+Project 93,Faible,En attente,14000,Client CO,2024-06-01,2024-09-01
+Project 94,Moyenne,En cours,42000,Client CP,2023-03-01,2023-07-01
+Project 95,Élevée,Terminé,87000,Client CQ,2022-08-01,2022-12-01
+Project 96,Faible,Annulé,10000,Client CR,2021-06-01,2021-10-01
+Project 97,Moyenne,En attente,28000,Client CS,2023-06-01,2023-10-01
+Project 98,Élevée,En cours,93000,Client CT,2022-01-01,2022-05-01
+Project 99,Faible,Terminé,16000,Client CU,2021-09-01,2021-12-01
+Project 100,Moyenne,Annulé,22000,Client CV,2021-10-01,2022-02-01
